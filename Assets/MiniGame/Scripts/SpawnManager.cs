@@ -31,7 +31,9 @@ public class SpawnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(2);
             int i=Random.Range(0,spawnList.Count);
-            Instantiate(monsterPrefab, spawnList[i].transform.position, spawnList[i].transform.rotation);
+            var temp=Instantiate(monsterPrefab, spawnList[i].transform.position, spawnList[i].transform.rotation);
+            temp.transform.position = new Vector3(temp.transform.position.x, 0.5f, temp.transform.position.z);
+            //Debug.Log(temp.transform.position);
         }
     }
     public void PlayerDead()

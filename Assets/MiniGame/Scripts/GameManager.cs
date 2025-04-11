@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public delegate void ResetGame();
     public event ResetGame resetGame;
-    
+    public delegate void ScoreChange(float changedScore);
+    public event ScoreChange scoreChange;
     [SerializeField] SpawnManager spawnManager;
     [SerializeField] UIManager uiManager;
     
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
     public void MonsterDead()
     {
         uiManager.score += 100;
+        
         if (uiManager.score >= 10000)
         {
             PlayerWin();

@@ -19,13 +19,17 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         GameManager.Instance.resetGame += ResetGame;
-
+        ResetGame();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    private void FixedUpdate()
+    {
+        scoreText.text=score.ToString();
     }
     public void PlayerDead()
     {
