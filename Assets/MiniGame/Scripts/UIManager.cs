@@ -11,14 +11,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] RawImage looseImage;
     [SerializeField] Button resetButton;
     [SerializeField] Button quitButton;
-
+    [SerializeField] TMP_Text playerHP;
     public float score;
-    
+    public int playerHPNumber;
 
     // Start is called before the first frame update
     void Start()
     {
         GameManager.Instance.resetGame += ResetGame;
+        
         ResetGame();
     }
 
@@ -30,6 +31,7 @@ public class UIManager : MonoBehaviour
     private void FixedUpdate()
     {
         scoreText.text=score.ToString();
+        playerHP.text = playerHPNumber.ToString();
     }
     public void PlayerDead()
     {
@@ -44,7 +46,9 @@ public class UIManager : MonoBehaviour
         winnerImage.enabled = false;
         looseImage.enabled = false;
         resetButton.enabled = false;
-        quitButton.enabled = false; 
+        quitButton.enabled = false;
+        playerHPNumber = GameManager.Instance.Hp;
+        playerHP.text= playerHPNumber.ToString();
         scoreText.text = score.ToString();
     }
     public void PlayerWin()

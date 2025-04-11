@@ -13,7 +13,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] UIManager uiManager;
     
     public GameObject player;
-    private int HP;
+    private int hP=3;
+    public int Hp
+    {
+        get { return hP; }
+        set { value = Hp; }
+    }
 
 
     private static GameManager instance;
@@ -59,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        HP = 3;
+        hP = 3;
         resetGame.Invoke();
         //uiManager.ResetGame();
         //spawnManager.ResetGame();
@@ -75,13 +80,15 @@ public class GameManager : MonoBehaviour
     }
     public void PlayerGetHit()
     {
-        HP -= 1;
-        if (HP <= 0) 
+        hP -= 1;
+
+        if (hP <= 0) 
         {
-            HP = 0;
+            hP = 0;
             uiManager.PlayerDead();
             spawnManager.PlayerDead();
         }
+        uiManager.playerHPNumber = hP;
     }
     public void MonsterDead()
     {
