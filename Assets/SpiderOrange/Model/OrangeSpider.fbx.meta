@@ -309,11 +309,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: move
+      name: move forward
       takeName: "\u0421\u043A\u0435\u043B\u0435\u0442|Animation"
       internalID: 3008054218367278806
       firstFrame: 129
-      lastFrame: 228
+      lastFrame: 153
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
