@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
     private void FixedUpdate()
     {
         //player = GameManager.Instance.player.transform;
-        monsterBody.velocity = new Vector3(-(transform.position.x-player.position.x), monsterBody.velocity.y, -(transform.position.z - player.position.z)).normalized*50;
+        monsterBody.velocity = new Vector3(-(transform.position.x-player.position.x), monsterBody.velocity.y, -(transform.position.z - player.position.z)).normalized*5;
        
         //Debug.Log(monsterBody.velocity);
     }

@@ -29,7 +29,7 @@ public class SpawnManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(0.2f);
             int i=Random.Range(0,spawnList.Count);
             var temp=Instantiate(monsterPrefab, spawnList[i].transform.position, spawnList[i].transform.rotation);
             temp.transform.position = new Vector3(temp.transform.position.x, 0.5f, temp.transform.position.z);
