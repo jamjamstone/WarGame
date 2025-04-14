@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,13 +37,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +52,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -134,18 +134,238 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1467
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 534edfdd6d76d6d4c806d42c081f8724
+      internalID: 817587019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_1
+      rect:
+        serializedVersion: 2
+        x: 1548
+        y: 1467
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69f79fdce468acc4aa4cd8c5b5a9cfd5
+      internalID: -1136126295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_2
+      rect:
+        serializedVersion: 2
+        x: 3096
+        y: 1467
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fefbcc742ab624b4ba1e970af784d6a4
+      internalID: -742223727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_3
+      rect:
+        serializedVersion: 2
+        x: 4644
+        y: 1467
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ead82c8fb83f4f47bb45a9d4a7d14b7
+      internalID: -1797651288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_4
+      rect:
+        serializedVersion: 2
+        x: 6192
+        y: 1467
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7dd5e13ff378c14b835d749bb0f519c
+      internalID: -316870697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af28221e255ddc24d82e2caa578205c0
+      internalID: -742329092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_6
+      rect:
+        serializedVersion: 2
+        x: 1548
+        y: 0
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 696a180349cb5f24785b79cd5178ee20
+      internalID: -1927873324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_7
+      rect:
+        serializedVersion: 2
+        x: 3096
+        y: 0
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54593076b1defe1479d1177ab4022b0e
+      internalID: -395621942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_8
+      rect:
+        serializedVersion: 2
+        x: 4644
+        y: 0
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bd7a8745e8c53b4699eaec4264a9f14
+      internalID: 497737811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_9
+      rect:
+        serializedVersion: 2
+        x: 6192
+        y: 0
+        width: 1548.6
+        height: 1467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0762614391c432d4cb64351ea1f9f5fe
+      internalID: -321729009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6b88524e0bbffac49925ea2401909fc2
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_0: 817587019
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_1: -1136126295
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_2: -742223727
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_3: -1797651288
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_4: -316870697
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_5: -742329092
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_6: -1927873324
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_7: -395621942
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_8: 497737811
+      vecteezy_3d-number-set-1-to-10-isolated-on-transparent-background_16774411_9: -321729009
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
