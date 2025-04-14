@@ -9,8 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text scoreText;
     [SerializeField] RawImage winnerImage;
     [SerializeField] RawImage looseImage;
-    [SerializeField] Button resetButton;
-    [SerializeField] Button quitButton;
+    [SerializeField] GameObject resetButton;
+    [SerializeField] GameObject quitButton;
     [SerializeField] TMP_Text playerHP;
     public float score;
     public int playerHPNumber;
@@ -35,18 +35,19 @@ public class UIManager : MonoBehaviour
     }
     public void PlayerDead()
     {
+        playerHP.text = playerHPNumber.ToString();
         winnerImage.enabled = false;
         looseImage.enabled = true;
-        resetButton.enabled = true;
-        quitButton.enabled = true;
+        resetButton.SetActive(true);
+        quitButton.SetActive(true);
     }
     public void ResetGame()
     {
         score = 0;
         winnerImage.enabled = false;
         looseImage.enabled = false;
-        resetButton.enabled = false;
-        quitButton.enabled = false;
+        resetButton.SetActive(false);
+        quitButton.SetActive(false);
         playerHPNumber = GameManager.Instance.Hp;
         playerHP.text= playerHPNumber.ToString();
         scoreText.text = score.ToString();
@@ -55,7 +56,7 @@ public class UIManager : MonoBehaviour
     {
         winnerImage.enabled = true;
         looseImage.enabled = false;
-        resetButton.enabled = true;
-        quitButton.enabled = true;
+        resetButton.SetActive(true);
+        quitButton.SetActive(true);
     }
 }

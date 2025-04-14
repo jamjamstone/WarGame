@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public delegate void ResetGame();
     public event ResetGame resetGame;
+    public delegate void AllMonsterDead();
+    public event AllMonsterDead allMonsterDead;
     public delegate void ScoreChange(float changedScore);
     public event ScoreChange scoreChange;
     [SerializeField] SpawnManager spawnManager;
@@ -87,6 +89,7 @@ public class GameManager : MonoBehaviour
             hP = 0;
             uiManager.PlayerDead();
             spawnManager.PlayerDead();
+            allMonsterDead.Invoke();
         }
         uiManager.playerHPNumber = hP;
     }
@@ -94,7 +97,7 @@ public class GameManager : MonoBehaviour
     {
         uiManager.score += 100;
         
-        if (uiManager.score >= 10000)
+        if (uiManager.score >= 5000)
         {
             PlayerWin();
         }

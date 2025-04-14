@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     {
         player = GameManager.Instance.player.transform;
         transform.LookAt(Vector3.zero);
-        GameManager.Instance.resetGame += ResetGame;
+        GameManager.Instance.allMonsterDead += ResetGame;
         //monsterBody.AddForce(new Vector3(-(transform.position.x - player.position.x), 0, -(transform.position.z - player.position.z)).normalized * 2);
     }
 
