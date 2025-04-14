@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
 
     public void ResetGame()
     {
+        GameManager.Instance.allMonsterDead -= ResetGame;
         Destroy(gameObject);
     }
     private void FixedUpdate()
@@ -39,10 +40,14 @@ public class Enemy : MonoBehaviour
             //Debug.Log("hit by stone");
             monsterCollider.enabled = false;
             GameManager.Instance.MonsterDead();
+            GameManager.Instance.allMonsterDead -= ResetGame;
             Destroy(gameObject);
         }else if (collision.collider.CompareTag("Player"))
         {
+            monsterCollider.enabled = false;
             GameManager.Instance.PlayerGetHit();
+            GameManager.Instance.allMonsterDead -= ResetGame;
+            Destroy(gameObject);
         }
     }
 

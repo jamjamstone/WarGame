@@ -39,10 +39,12 @@ public class SpawnManager : MonoBehaviour
     public void PlayerDead()
     {
         stoneSpawnPoint.StoneSpawnEnd();
-        StopCoroutine(SpawnMonster());
+        StopAllCoroutines();
+        //StopCoroutine(SpawnMonster());
     }
     public void ResetGame()
     {
+        StopAllCoroutines();
         stoneSpawnPoint.StoneSpawnStart();
         StartSpawn();
     }

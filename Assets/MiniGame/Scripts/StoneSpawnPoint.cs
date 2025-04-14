@@ -13,7 +13,8 @@ public class StoneSpawnPoint : MonoBehaviour
     }
     public void StoneSpawnEnd()
     {
-        StopCoroutine(SpawnStones());
+        //StopCoroutine(SpawnStones());
+        StopAllCoroutines();
     }
     IEnumerator SpawnStones()
     {
