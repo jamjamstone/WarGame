@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     public Rigidbody unitBody;
     public Collider unitCollider;
     public Vector3 unitDestination;
+    public IUnitState unitState;
 
 
 
