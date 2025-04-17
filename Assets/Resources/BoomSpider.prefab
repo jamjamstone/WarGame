@@ -588,6 +588,8 @@ GameObject:
   - component: {fileID: 3645078484014516579}
   - component: {fileID: 2368645790251263723}
   - component: {fileID: 8354759831964327681}
+  - component: {fileID: 2071102391308231392}
+  - component: {fileID: 2921566544431957676}
   m_Layer: 0
   m_Name: BoomSpider
   m_TagString: Untagged
@@ -645,9 +647,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb4dda8cdd99c884c9e7ccd9d291a63d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitAnimator: {fileID: 0}
-  unitInfo: {fileID: 0}
-  unitPrefab: {fileID: 0}
+  unitAnimator: {fileID: 2368645790251263723}
+  unitInfo: {fileID: 11400000, guid: 9711599376590f14ba7c29e341e99ff4, type: 2}
+  unitBody: {fileID: 2921566544431957676}
+  unitCollider: {fileID: 2071102391308231392}
+  unitDestination: {x: 0, y: 0, z: 0}
+--- !u!65 &2071102391308231392
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3972662848796662688}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.2, z: 1}
+  m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!54 &2921566544431957676
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3972662848796662688}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4415805194919253606
 GameObject:
   m_ObjectHideFlags: 0

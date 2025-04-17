@@ -5,14 +5,26 @@ using UnityEngine;
 
 public enum UnitStateName
 {
-    None, Dead, Move, Attack
+    None, Dead, Move, Attack,Idle
 }
 
 public interface IUnitState
 {
-    public void StateAction();
-    public void EndState();
-    public void StartState();
+    
     
    
+}
+
+
+public class IUnitStateDead : IUnitState
+{
+    
+}
+public class IUnitStateMove : IUnitState
+{
+    
+}
+public class IUnitStateAttack : IUnitState
+{
+    
 }

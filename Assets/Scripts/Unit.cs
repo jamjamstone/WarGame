@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +11,15 @@ public class Unit : MonoBehaviour
     public Rigidbody unitBody;
     public Collider unitCollider;
     public Vector3 unitDestination;
-    public IUnitState unitState;
+    public UnitStateName unitState;
+    public LayerMask targetLayerMask;
 
+    //public delegate void OnDead();
+    public event EventHandler OnDead;
 
-
+    private void Start()
+    {
+        targetLayerMask = LayerMask.NameToLayer("Unit");
+    }
 
 }
