@@ -7,11 +7,7 @@ using UnityEngine.UI;
 public class StrategeCard : MonoBehaviour
 {
     public StrategeCardInfo cardInfo;
-    public TMP_Text cardName;
-    public TMP_Text cardDescription;
-    public RawImage[] cardCostList=new RawImage[StaticField.MaxCardCost];//코스트 이미지나 아이콘 가져와서 할당하기
-    public RawImage cardIcon;
-    public RawImage cardCost;
+    
     
 
     
@@ -21,14 +17,23 @@ public class StrategeCard : MonoBehaviour
     }
     public void SetCardInfo()//cardinfo에서 데이터를 가져와 작동
     {
-        cardName.text=cardInfo.cardName;
-        cardDescription.text=cardInfo.cardDescription;
-        cardIcon=cardInfo.cardIcon;
-        cardCost = cardCostList[cardInfo.cardCost-1];
+        
     }
    
     void Update()
     {
         
     }
+
+
+    public void ActivateCardPower()// 카드 능력 활성화 
+    {
+
+    }
+    public void DeactivateCardPower()//카드 능력 비활성화
+    {
+
+    }
+
+
 }
