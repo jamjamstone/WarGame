@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private GameManager gameManager;
+    private static GameManager gameManager;
     public InGameUIManager uiManager;
     public TurnManager turnManager;
     public UnitManager unitManager;
     public StrategeManager strategeManager;
-    public GameManager Instance
+    public static GameManager Instance
     {
         get {
               if (gameManager == null)

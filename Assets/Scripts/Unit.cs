@@ -14,16 +14,19 @@ public class Unit : MonoBehaviour
     public UnitStateName unitState;
     public LayerMask targetLayerMask;
 
-    //public delegate void OnDead();
-    public event EventHandler OnDead;
+    public delegate void onDead(Unit unit);
+    public event onDead OnDead;
+    //public event Action OnDead;
 
     private void Start()
     {
         targetLayerMask = LayerMask.NameToLayer("Unit");
+
     }
     public void UnitDie()
     {
-
+        
+        OnDead.Invoke(this);
         Destroy(gameObject,2f);
     }
 

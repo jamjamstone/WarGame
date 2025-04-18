@@ -10,7 +10,8 @@ public class BoomSpider : Unit
     public ParticleSystem explosion;
     private void Start()
     {
-        UnitInit();
+        //UnitInit();
+        GameManager.Instance.unitManager.AddMyUnits(this);
     }
     public void ChangeState(UnitStateName stateName)
     {
@@ -98,7 +99,7 @@ public class BoomSpider : Unit
 
     public void UnitMove()
     {
-        unitBody.velocity = transform.forward * 2;
+        unitBody.velocity = transform.forward * unitInfo.unitSpeed;
     }
     
     private void OnTriggerEnter(Collider other)

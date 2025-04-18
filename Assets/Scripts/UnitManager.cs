@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    public GameObject[] myUnits;
-    public GameObject[] enemyUnits;
+    public List<GameObject> myUnits;
+    public List<GameObject> enemyUnits;
 
 
 
@@ -20,4 +20,15 @@ public class UnitManager : MonoBehaviour
     {
         
     }
+    
+    public void AddMyUnits(Unit unit)
+    {
+        myUnits.Add(unit.gameObject);
+    }
+    public void AddEnemyUnit(Unit unit)
+    {
+        enemyUnits.Add(unit.gameObject);
+    }
+
+
 }
