@@ -15,6 +15,7 @@ MonoBehaviour:
   unitName: BoomSpider
   unitHP: 500
   unitATK: 3000
+  unitSpeed: 10
   unitDescription: "\uC790\uD3ED\uD558\uB294 \uAC70\uBBF8 \uD3ED\uBC1C \uBC94\uC704
     \uC548\uC5D0 \uC811\uADFC\uC2DC \uC790\uD3ED\uD55C\uB2E4"
   unitNumber: 20

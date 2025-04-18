@@ -8,6 +8,10 @@ public class BoomSpider : Unit
 {
     private float attackRadius = 5;
     public ParticleSystem explosion;
+    private void Start()
+    {
+        UnitInit();
+    }
     public void ChangeState(UnitStateName stateName)
     {
         unitState=stateName;
@@ -16,6 +20,11 @@ public class BoomSpider : Unit
     public void SetDestination(Vector3 willDestination)
     {
         unitDestination = willDestination;
+    }
+    public void UnitInit()
+    {
+        StartCoroutine(StateAction());
+        StartCoroutine(DetectEnemy());
     }
     
     IEnumerator StateAction()
@@ -64,8 +73,10 @@ public class BoomSpider : Unit
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
-            if(detected[0].tag == "Unit")
+
+            if(detected.Length>1&&detected[1]?.tag == "Unit")
             {
+                //Debug.Log("enemydetected");
                 UnitAttack(detected);
             }
             
@@ -76,8 +87,10 @@ public class BoomSpider : Unit
     }
     public void UnitAttack(Collider[] targets)//자폭 공격이라 특별 취급
     {
+        ChangeState(UnitStateName.Attack);
+        Debug.Log(targets.Length);
         for(int i=0;i<targets.Length;i++)
-        {
+        {   
             explosion.Play();
             targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
         }
@@ -85,7 +98,7 @@ public class BoomSpider : Unit
 
     public void UnitMove()
     {
-
+        unitBody.velocity = transform.forward * 2;
     }
     
     private void OnTriggerEnter(Collider other)

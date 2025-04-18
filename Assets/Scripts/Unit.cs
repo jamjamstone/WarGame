@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour
     public void UnitDie()
     {
 
+        Destroy(gameObject,2f);
     }
 
     public void GetHit(float dmg)
@@ -31,6 +32,9 @@ public class Unit : MonoBehaviour
         unitInfo.unitHP -= dmg;
         if (unitInfo.unitHP < 0)
         {
+            unitBody.useGravity = false;
+            unitCollider.enabled = false;
+            unitInfo.unitHP = 0;
             UnitDie();
         }
     }

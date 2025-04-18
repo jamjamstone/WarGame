@@ -8,8 +8,10 @@ public class UnitInfo :ScriptableObject
     public string unitName;
     public float unitHP;
     public float unitATK;
+    public float unitSpeed;
     public string unitDescription;
     public int unitNumber;
     public bool isMine;
+
 
 }

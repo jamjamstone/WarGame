@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-
+    public GameObject[] myUnits;
+    public GameObject[] enemyUnits;
 
 
 
