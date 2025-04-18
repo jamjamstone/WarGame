@@ -21,5 +21,17 @@ public class Unit : MonoBehaviour
     {
         targetLayerMask = LayerMask.NameToLayer("Unit");
     }
+    public void UnitDie()
+    {
 
+    }
+
+    public void GetHit(float dmg)
+    {
+        unitInfo.unitHP -= dmg;
+        if (unitInfo.unitHP < 0)
+        {
+            UnitDie();
+        }
+    }
 }

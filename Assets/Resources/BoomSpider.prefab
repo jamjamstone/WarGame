@@ -590,9 +590,9 @@ GameObject:
   - component: {fileID: 8354759831964327681}
   - component: {fileID: 2071102391308231392}
   - component: {fileID: 2921566544431957676}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BoomSpider
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -652,6 +652,11 @@ MonoBehaviour:
   unitBody: {fileID: 2921566544431957676}
   unitCollider: {fileID: 2071102391308231392}
   unitDestination: {x: 0, y: 0, z: 0}
+  unitState: 0
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  explosion: {fileID: 198000012777718758, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
 --- !u!65 &2071102391308231392
 BoxCollider:
   m_ObjectHideFlags: 0

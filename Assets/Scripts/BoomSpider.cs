@@ -7,7 +7,7 @@ using UnityEngine;
 public class BoomSpider : Unit
 {
     private float attackRadius = 5;
-
+    public ParticleSystem explosion;
     public void ChangeState(UnitStateName stateName)
     {
         unitState=stateName;
@@ -34,6 +34,7 @@ public class BoomSpider : Unit
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, false);
                     unitAnimator.SetBool(StaticField.hashMove, true);
+                    UnitMove();
                     break;
 
                 case UnitStateName.Dead:
@@ -65,7 +66,7 @@ public class BoomSpider : Unit
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
             if(detected[0].tag == "Unit")
             {
-                UnitAttack();
+                UnitAttack(detected);
             }
             
 
@@ -73,28 +74,20 @@ public class BoomSpider : Unit
 
         }
     }
-    public void UnitAttack()
+    public void UnitAttack(Collider[] targets)//자폭 공격이라 특별 취급
     {
-
+        for(int i=0;i<targets.Length;i++)
+        {
+            explosion.Play();
+            targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+        }
     }
 
     public void UnitMove()
     {
 
     }
-    public void UnitDie()
-    {
-        
-    }
-
-    public void GetHit(float dmg)
-    {
-        unitInfo.unitHP -= dmg;
-        if(unitInfo.unitHP < 0)
-        {
-            UnitDie();
-        }
-    }
+    
     private void OnTriggerEnter(Collider other)
     {
         
