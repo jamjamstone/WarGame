@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public TurnManager turnManager;
     public UnitManager unitManager;
     public StrategeManager strategeManager;
+    public PlayerManager playerManager;
 
     public List<GameObject> unitList=new List<GameObject>();//프리팹을 저장하는 방식으로
     public List<GameObject> strategeList=new List<GameObject>();//프리팹을 저장하는 방식으로
