@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
+
 
 
 public class BoomSpider : Unit
@@ -24,6 +26,14 @@ public class BoomSpider : Unit
     }
     public void UnitInit()
     {
+        if (photonView.IsMine)
+        {
+            unitInfo.isMine = true;
+        }
+        else
+        {
+            unitInfo.isMine = false;
+        }
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
     }

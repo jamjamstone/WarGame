@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Unit : MonoBehaviour
+using Photon.Pun;
+public class Unit : MonoBehaviourPun
 {
     //public 
     public Animator unitAnimator;
