@@ -10,9 +10,8 @@ using UnityEngine.EventSystems;
 public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
 {
     private float attackRadius = 5;
-    private Camera cam;
-    private float distance;
-    private Vector3 offset;
+    
+    
 
     public ParticleSystem explosion;
     private void Start()
@@ -20,6 +19,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         //UnitInit();
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
+        //ChangeState(UnitStateName.Move);
     }
     public void ChangeState(UnitStateName stateName)
     {
@@ -123,24 +123,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Ray ray = cam.ScreenPointToRay(eventData.position);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            distance = Vector3.Distance(cam.transform.position, hit.point);
-            offset = transform.position - hit.point;
-        }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        Ray ray = cam.ScreenPointToRay(eventData.position);
-        Vector3 newPos = ray.GetPoint(distance);
-        transform.position = newPos + offset;
-    }
+    
 
     //public void OnDrag(PointerEventData eventData)
     //{

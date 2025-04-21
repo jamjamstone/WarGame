@@ -12,7 +12,7 @@ public class UnitInfo :ScriptableObject
     public string unitDescription;
     public int unitNumber;
     public bool isMine;
-    public float unitPrice;
+    public int unitPrice;
 
 
 }

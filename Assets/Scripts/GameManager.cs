@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerManager.ResetMoney();
     }
 
     // Update is called once per frame
@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     public void AddUnitToList(GameObject unit)
     {
         unitList.Add(unit);
+        //uiManager.AddUnitToList(unit.GetComponent<Unit>());
     }
     public void AddStrategeToList(GameObject stratege)
     {

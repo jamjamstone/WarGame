@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public int money;
+    public int money=StaticField.startMoney;
 
 
 
-    void Start()
+    public void ResetPlayerManager()
     {
-        
+        ResetMoney();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void ResetMoney()
     {
-        
+        money=StaticField.startMoney;
     }
 }
