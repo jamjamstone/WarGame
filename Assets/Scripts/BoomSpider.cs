@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 
-public class BoomSpider : Unit
+public class BoomSpider : Unit,IDragHandler
 {
     private float attackRadius = 5;
     public ParticleSystem explosion;
@@ -117,4 +118,9 @@ public class BoomSpider : Unit
         
     }
 
+    public void OnDrag(PointerEventData eventData)
+    {
+        Vector3 mousePosition = new Vector3(Input.mousePosition.x,transform.position.y,Input.mousePosition.z);
+        transform.position = mousePosition;
+    }
 }

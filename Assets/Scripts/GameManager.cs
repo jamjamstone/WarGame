@@ -9,6 +9,12 @@ public class GameManager : MonoBehaviour
     public TurnManager turnManager;
     public UnitManager unitManager;
     public StrategeManager strategeManager;
+
+    public List<GameObject> unitList=new List<GameObject>();//프리팹을 저장하는 방식으로
+    public List<GameObject> strategeList=new List<GameObject>();//프리팹을 저장하는 방식으로
+
+    public GameObject unitSpawnPoint;
+
     public static GameManager Instance
     {
         get {
@@ -48,4 +54,15 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public void AddUnitToList(GameObject unit)
+    {
+        unitList.Add(unit);
+    }
+    public void AddStrategeToList(GameObject stratege)
+    {
+        strategeList.Add(stratege);
+    }
+
+
 }
