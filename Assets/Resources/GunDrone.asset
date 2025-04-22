@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86cebb4422f2b6a42bef5d3d7d033994, type: 3}
-  m_Name: BoomSpider
+  m_Name: GunDrone
   m_EditorClassIdentifier: 
-  unitName: BoomSpider
+  unitName: GunDrone
   unitHP: 50
-  unitATK: 500
-  unitSpeed: 10
-  unitDescription: "\uC790\uD3ED\uD558\uB294 \uAC70\uBBF8 \uD3ED\uBC1C \uBC94\uC704
-    \uC548\uC5D0 \uC811\uADFC\uC2DC \uC790\uD3ED\uD55C\uB2E4"
+  unitATK: 100
+  unitSpeed: 7
+  unitDescription: 
   unitAttackSpeed: 0
-  unitNumber: 20
-  isMine: 1
-  unitPrice: 50
+  unitNumber: 0
+  isMine: 0
+  unitPrice: 100

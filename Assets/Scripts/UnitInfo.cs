@@ -10,6 +10,7 @@ public class UnitInfo :ScriptableObject
     public float unitATK;
     public float unitSpeed;
     public string unitDescription;
+    public float unitAttackSpeed;
     public int unitNumber;
     public bool isMine;
     public int unitPrice;

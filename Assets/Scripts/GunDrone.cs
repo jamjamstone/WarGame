@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
-using Unity.VisualScripting;
+using UnityEditor.PackageManager;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-
-public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
+public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 {
-    private float attackRadius = 5;
-    
-    
+    private float attackRadius=7;
 
-    public ParticleSystem explosion;
+
+    // Start is called before the first frame update
     private void Start()
     {
         //UnitInit();
@@ -23,20 +21,20 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     }
     public void ChangeState(UnitStateName stateName)
     {
-        unitState=stateName;
+        unitState = stateName;
     }
-    
+
     public void SetDestination(Vector3 willDestination)
     {
         unitDestination = willDestination;
     }
-    
     public void UnitActivate()
     {
         UnitInit();
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
     }
+
     IEnumerator StateAction()
     {
         while (true)
@@ -82,14 +80,14 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         while (true)
         {
             yield return new WaitForSeconds(1);
-            var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
+            var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
 
-            if(detected.Length>1&&detected[1]?.tag == "EnemyUnit")
+            if (detected.Length > 1 && detected[1]?.tag == "EnemyUnit")
             {
                 //Debug.Log("enemydetected");
                 UnitAttack(detected);
             }
-            
+
 
 
 
@@ -98,25 +96,15 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     public void UnitAttack(Collider[] targets)//자폭 공격이라 특별 취급
     {
         ChangeState(UnitStateName.Attack);
-        Debug.Log(targets.Length);
-        for(int i=0;i<targets.Length;i++)
-        {   
-            explosion.Play();
-            targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
-        }
+        //Debug.Log(targets.Length);
+        targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+        
     }
 
     public void UnitMove()
     {
         unitBody.velocity = transform.forward * unitInfo.unitSpeed;
     }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
-
-    
 
     //public void OnDrag(PointerEventData eventData)
     //{

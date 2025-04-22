@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Unit
+  - Bullet
+  - EnemyUnit
+  - MyUnit
   layers:
   - Default
   - TransparentFX

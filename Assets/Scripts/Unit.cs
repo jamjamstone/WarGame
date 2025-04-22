@@ -26,7 +26,7 @@ public class Unit : MonoBehaviourPun
 
     private void Start()
     {
-        targetLayerMask = LayerMask.NameToLayer("Unit");
+        targetLayerMask = LayerMask.NameToLayer("EnemyUnit");
         
     }
     public void UnitDie()
@@ -58,7 +58,18 @@ public class Unit : MonoBehaviourPun
             offset = transform.position - hit.point;
         }
     }
-
+    public void UnitInit()
+    {
+        if (unitInfo.isMine == true)
+        {
+            gameObject.tag = "MyUnit";
+        }
+        else
+        {
+            gameObject.tag = "EnemyUnit";
+        }
+        
+    }
     public void OnDrag(PointerEventData eventData)
     {
         Ray ray = cam.ScreenPointToRay(eventData.position);
