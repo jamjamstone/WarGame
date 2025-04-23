@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using Photon.Pun;
 public class InGameUIManager : MonoBehaviour
 {
     public List<GameObject> sellUnits = new List<GameObject>();//기본적으로 유닛을 구매할 때 원래는 묶음 단위로 구매할까 했는데 단일로 구매하는걸로 변경
@@ -72,7 +72,7 @@ public class InGameUIManager : MonoBehaviour
         }
         GameManager.Instance.unitManager.AddMyUnits(sellUnits[index].GetComponent<Unit>());
        // Debug.Log("trbuy2");
-        var buyUnit = Instantiate(sellUnits[index].gameObject,GameManager.Instance.unitSpawnPoint.transform.position, GameManager.Instance.unitSpawnPoint.transform.rotation);
+        var buyUnit = Instantiate(sellUnits[index].gameObject,GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
        // Debug.Log("trbuy3");
         GameManager.Instance.playerManager.money -= (int)sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice;
         OnMoneyChanged?.Invoke();
@@ -88,7 +88,16 @@ public class InGameUIManager : MonoBehaviour
         }
         GameManager.Instance.unitManager.AddMyUnits(unit.GetComponent<Unit>());
         // Debug.Log("trbuy2");
-        var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.unitSpawnPoint.transform.position, GameManager.Instance.unitSpawnPoint.transform.rotation);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
+        }
+        
+        var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
         // Debug.Log("trbuy3");
         GameManager.Instance.playerManager.money -= (int)unit.GetComponent<Unit>().unitInfo.unitPrice;
         OnMoneyChanged?.Invoke();

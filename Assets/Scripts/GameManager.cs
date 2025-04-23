@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> unitList=new List<GameObject>();//프리팹을 저장하는 방식으로
     public List<GameObject> strategeList=new List<GameObject>();//프리팹을 저장하는 방식으로
 
-    public GameObject unitSpawnPoint;
+    public GameObject hostUnitSpawnPoint;
+    public GameObject nonHostUnitSpawnPoint;
 
     public static GameManager Instance
     {
