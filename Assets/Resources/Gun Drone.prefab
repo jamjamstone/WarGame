@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5865315082557544512}
   - component: {fileID: 2154284689123086553}
   - component: {fileID: 5429514468669090638}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Gun Drone
-  m_TagString: Untagged
+  m_TagString: EnemyUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 18c800137884f7e41a1c548b743d113b, type: 3}
 --- !u!114 &2154284689123086553

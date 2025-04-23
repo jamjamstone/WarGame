@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 //using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InGameUIManager : MonoBehaviour
@@ -42,6 +44,7 @@ public class InGameUIManager : MonoBehaviour
     {
         unitInfoPanel.SetActive(false);
         OnMoneyChanged += SetMoneyToUI;
+        MakeUnitBuyButton();
         SetMoneyToUI();
     }
     public void SetMoneyToUI()
@@ -59,7 +62,7 @@ public class InGameUIManager : MonoBehaviour
     }
     public void BuyUnit(int index)
     {
-        Debug.Log("trbuy");
+        //Debug.Log("trbuy");
         if (GameManager.Instance.playerManager.money < sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice)
         {
             Debug.Log(GameManager.Instance.playerManager.money);
@@ -68,10 +71,26 @@ public class InGameUIManager : MonoBehaviour
             return;
         }
         GameManager.Instance.unitManager.AddMyUnits(sellUnits[index].GetComponent<Unit>());
-        Debug.Log("trbuy2");
+       // Debug.Log("trbuy2");
         var buyUnit = Instantiate(sellUnits[index].gameObject,GameManager.Instance.unitSpawnPoint.transform.position, GameManager.Instance.unitSpawnPoint.transform.rotation);
-        Debug.Log("trbuy3");
+       // Debug.Log("trbuy3");
         GameManager.Instance.playerManager.money -= (int)sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice;
+        OnMoneyChanged?.Invoke();
+    }
+    public void BuyUnit(GameObject unit)
+    {
+        //Debug.Log("trbuy");
+        if (GameManager.Instance.playerManager.money < unit.GetComponent<Unit>().unitInfo.unitPrice)
+        {
+            
+            OnBuyDenied();
+            return;
+        }
+        GameManager.Instance.unitManager.AddMyUnits(unit.GetComponent<Unit>());
+        // Debug.Log("trbuy2");
+        var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.unitSpawnPoint.transform.position, GameManager.Instance.unitSpawnPoint.transform.rotation);
+        // Debug.Log("trbuy3");
+        GameManager.Instance.playerManager.money -= (int)unit.GetComponent<Unit>().unitInfo.unitPrice;
         OnMoneyChanged?.Invoke();
     }
     public void OnBuyDenied()
@@ -147,6 +166,25 @@ public class InGameUIManager : MonoBehaviour
         }
     }
 
+    public void MakeUnitBuyButton()
+    {
+        foreach(var unit in sellUnits)
+        {
+            var tempUnit = unit;
+            var temp=Instantiate(baseUnitButton,shopPanel.transform);
 
+            temp.GetComponent<Button>().onClick.AddListener(()=>BuyUnit(tempUnit));//addlistner를 쓰기 위해서 람다식 사용
+                                                                                  
+            EventTrigger.Entry entry = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
+            entry.eventID = EventTriggerType.PointerEnter;//이벤트 아이디 할당
+            entry.callback.AddListener((eventData) => ShowUnitInfoByPoint(tempUnit.GetComponent<Unit>())); //함수 추가
+            temp.GetComponent<EventTrigger>().triggers.Add(entry);
 
+            EventTrigger.Entry entryExit = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
+            entryExit.eventID = EventTriggerType.PointerExit;//이벤트 아이디 할당
+            entryExit.callback.AddListener((eventData) => DisableUnitInfo()); //함수 추가
+            temp.GetComponent<EventTrigger>().triggers.Add(entryExit);
+        }
+    }
+    
 }

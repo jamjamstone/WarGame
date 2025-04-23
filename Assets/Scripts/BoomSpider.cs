@@ -90,7 +90,11 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
                 //Debug.Log("enemydetected");
                 UnitAttack(detected);
             }
-            
+            else
+            {
+                ChangeState(UnitStateName.Move);
+            }
+
 
 
 

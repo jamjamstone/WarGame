@@ -9,6 +9,8 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
 {
     // Start is called before the first frame update
     private float attackRadius = 7;
+    [SerializeField] GameObject flame1;
+    [SerializeField] GameObject flame2;
     //[SerializeField] ParticleSystem[] muzzleFlashs;
 
     // Start is called before the first frame update
@@ -19,6 +21,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
+        UnitActivate();
     }
     public void ChangeState(UnitStateName stateName)
     {
@@ -47,6 +50,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, true);
                     unitAnimator.SetBool(StaticField.hashMove, false);
+                    
                     break;
                 case UnitStateName.Move:
                     unitAnimator.SetBool(StaticField.hashIdle, false);
@@ -56,10 +60,10 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     break;
 
                 case UnitStateName.Dead:
-                    unitAnimator.SetBool(StaticField.hashIdle, false);
-                    unitAnimator.SetBool(StaticField.hashAttack, false);
-                    unitAnimator.SetBool(StaticField.hashMove, false);
-                    unitAnimator.SetBool(StaticField.hashDead, true);
+                    //unitAnimator.SetBool(StaticField.hashIdle, false);
+                    //unitAnimator.SetBool(StaticField.hashAttack, false);
+                    //unitAnimator.SetBool(StaticField.hashMove, false);
+                    //unitAnimator.SetBool(StaticField.hashDead, true);
                     break;
                 case UnitStateName.Idle:
                     unitAnimator.SetBool(StaticField.hashIdle, true);
@@ -80,13 +84,17 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.1f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
 
-            if (detected.Length > 1 && detected[1]?.tag == "EnemyUnit")
+            if (detected.Length > 0 && detected[0]?.tag == "EnemyUnit")
             {
                 //Debug.Log("enemydetected");
                 UnitAttack(detected);
+            }
+            else
+            {
+                ChangeState(UnitStateName.Move);
             }
 
 
@@ -96,10 +104,14 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitAttack(Collider[] targets)//
     {
+        Vector3 direction = targets[0].transform.position - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1* Time.deltaTime);
         ChangeState(UnitStateName.Attack);
-        
+        flame1.SetActive(true);
+        flame2.SetActive(true);
         //Debug.Log(targets.Length);
-        targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+        //targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
     }
 
     public void UnitMove()

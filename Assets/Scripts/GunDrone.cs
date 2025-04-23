@@ -19,7 +19,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
-        UnitActivate();
+       // UnitActivate();
     }
     private void FixedUpdate()
     {
@@ -99,6 +99,10 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
                     UnitAttack(detected);
                 }
 
+            }
+            else
+            {
+                ChangeState(UnitStateName.Move);
             }
 
 
