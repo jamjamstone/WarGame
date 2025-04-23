@@ -24,15 +24,11 @@ public class Unit : MonoBehaviourPun
     protected Camera cam;
     //public event Action OnDead;
 
-    private void Start()
-    {
-        targetLayerMask = LayerMask.NameToLayer("EnemyUnit");
-        
-    }
+    
     public void UnitDie()
     {
         
-        OnDead.Invoke(this);
+        OnDead?.Invoke(this);
         Destroy(gameObject,2f);
     }
 

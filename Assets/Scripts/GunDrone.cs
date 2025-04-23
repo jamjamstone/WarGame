@@ -9,15 +9,21 @@ using UnityEngine.EventSystems;
 public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 {
     private float attackRadius=7;
-
-
+    [SerializeField] ParticleSystem[] muzzleFlashs;
+    private float attackDelayTime = 0;
     // Start is called before the first frame update
     private void Start()
     {
+        //targetLayerMask = LayerMask.NameToLayer("EnemyUnit");
         //UnitInit();
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
+        UnitActivate();
+    }
+    private void FixedUpdate()
+    {
+        attackDelayTime += Time.fixedDeltaTime;
     }
     public void ChangeState(UnitStateName stateName)
     {
@@ -30,6 +36,8 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitActivate()
     {
+        
+        Debug.Log("act");
         UnitInit();
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
@@ -43,27 +51,27 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
             switch (unitState)
             {
                 case UnitStateName.Attack:
-                    unitAnimator.SetBool(StaticField.hashIdle, false);
-                    unitAnimator.SetBool(StaticField.hashAttack, true);
-                    unitAnimator.SetBool(StaticField.hashMove, false);
+                    //unitAnimator.SetBool(StaticField.hashIdle, false);
+                    //unitAnimator.SetBool(StaticField.hashAttack, true);
+                    //unitAnimator.SetBool(StaticField.hashMove, false);
                     break;
                 case UnitStateName.Move:
-                    unitAnimator.SetBool(StaticField.hashIdle, false);
-                    unitAnimator.SetBool(StaticField.hashAttack, false);
-                    unitAnimator.SetBool(StaticField.hashMove, true);
+                    //unitAnimator.SetBool(StaticField.hashIdle, false);
+                    //unitAnimator.SetBool(StaticField.hashAttack, false);
+                    //unitAnimator.SetBool(StaticField.hashMove, true);
                     UnitMove();
                     break;
 
                 case UnitStateName.Dead:
-                    unitAnimator.SetBool(StaticField.hashIdle, false);
-                    unitAnimator.SetBool(StaticField.hashAttack, false);
-                    unitAnimator.SetBool(StaticField.hashMove, false);
-                    unitAnimator.SetBool(StaticField.hashDead, true);
+                    //unitAnimator.SetBool(StaticField.hashIdle, false);
+                    //unitAnimator.SetBool(StaticField.hashAttack, false);
+                    //unitAnimator.SetBool(StaticField.hashMove, false);
+                    //unitAnimator.SetBool(StaticField.hashDead, true);
                     break;
                 case UnitStateName.Idle:
-                    unitAnimator.SetBool(StaticField.hashIdle, true);
-                    unitAnimator.SetBool(StaticField.hashAttack, false);
-                    unitAnimator.SetBool(StaticField.hashMove, false);
+                    //unitAnimator.SetBool(StaticField.hashIdle, true);
+                    //unitAnimator.SetBool(StaticField.hashAttack, false);
+                    //unitAnimator.SetBool(StaticField.hashMove, false);
                     break;
                 default:
                     break;
@@ -81,11 +89,16 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-
-            if (detected.Length > 1 && detected[1]?.tag == "EnemyUnit")
+            Debug.Log("trydetect");
+            Debug.Log(detected[0].gameObject.name);
+            if (detected.Length > 0 && detected[0]?.tag == "EnemyUnit")
             {
-                //Debug.Log("enemydetected");
-                UnitAttack(detected);
+                Debug.Log("enemydetected");
+                if (attackDelayTime > unitInfo.unitAttackSpeed)
+                {
+                    UnitAttack(detected);
+                }
+
             }
 
 
@@ -93,9 +106,18 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
         }
     }
-    public void UnitAttack(Collider[] targets)//자폭 공격이라 특별 취급
+    public void UnitAttack(Collider[] targets)//
     {
+        attackDelayTime = 0;
         ChangeState(UnitStateName.Attack);
+        transform.LookAt(targets[0].gameObject.transform);
+        foreach (var muzzleFlash in muzzleFlashs)
+        {
+            if (muzzleFlash != null)
+            {
+                muzzleFlash.Play();
+            }
+        }
         //Debug.Log(targets.Length);
         targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
         
