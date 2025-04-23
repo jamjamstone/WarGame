@@ -658,7 +658,7 @@ MonoBehaviour:
   unitState: 0
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   explosion: {fileID: 2366761604235802449}
 --- !u!65 &2071102391308231392
 BoxCollider:

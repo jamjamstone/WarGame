@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GunDrone
   m_EditorClassIdentifier: 
   unitName: GunDrone
-  unitHP: 50
+  unitHP: 150
   unitATK: 100
   unitSpeed: 7
   unitDescription: 
