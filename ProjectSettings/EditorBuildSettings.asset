@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Room.unity
     guid: e71046e6f9583d64cb18f77a16e303f2
   - enabled: 1
-    path: Assets/Scenes/InGameTemp.unity
-    guid: 9afc5a454fe44654fb59f8539ca84613
+    path: Assets/Scenes/InGameTestScene.unity
+    guid: b37fb3a956473264eac748e0825c3f85
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 32397405b958af04bbff1af4d4dead37, type: 2}
     com.unity.addressableassets: {fileID: 11400000, guid: e2ef2817d2a66e749921d94805358429, type: 2}

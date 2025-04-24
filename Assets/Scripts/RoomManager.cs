@@ -5,6 +5,7 @@ using Photon.Pun;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -22,16 +23,46 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             gameStartButton.enabled = true;
             readyButton.enabled = false;
+            
         }
         else
         {
             gameStartButton.enabled=false;
             readyButton.enabled=true;
         }
+
+        SetNickName();
+
+
+
+    }
+    [PunRPC]
+    public void SetNickName()
+    {
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player != null)
+            {
+                if (player.IsMasterClient)
+                {
+                    hostPlayer.text = player.NickName;
+                }
+                else
+                {
+                    guestPlayer.text = player.NickName;
+                }
+            }
+            
+        }
+    }
+    
+    public void ReadyButtonPressed()
+    {
+        photonView.RPC("ChangeReadyText", RpcTarget.All);//
     }
 
-
-    public void ReadyButtonPressed()
+    [PunRPC]
+    public void ChangeReadyText()
     {
         if (!isReady)
         {
@@ -41,23 +72,46 @@ public class RoomManager : MonoBehaviourPunCallbacks
         else
         {
             readyButtonText.text = "Not Ready";
-            isReady=false;
+            isReady = false;
         }
     }
+
+
     public void GameStartButtonPressed()
     {
         if(isReady)
         {
-           PhotonNetwork.LoadLevel("InGame");
+           PhotonNetwork.LoadLevel("InGameTestScene");
         }
 
 
 
     }
-
-    // Update is called once per frame
-    void Update()
+    public void QuitToTitleButtonPressed()
     {
-        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LeaveRoom();
+            //PhotonNetwork.LoadLevel("Title");
+        }
+        else
+        {
+            PhotonNetwork.LeaveRoom();
+            //SceneManager.LoadScene("Title");
+        }
+
     }
+    
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        photonView.RPC("SetNickName", RpcTarget.All);
+    }
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        SceneManager.LoadScene("Title");
+        photonView.RPC("SetNickName", RpcTarget.All);
+    }
+
 }

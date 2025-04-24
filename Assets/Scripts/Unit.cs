@@ -43,6 +43,11 @@ public class Unit : MonoBehaviourPun
             UnitDie();
         }
     }
+    [PunRPC]
+    public void GetHitRPC()
+    {
+
+    }
     public void OnPointerDown(PointerEventData eventData)
     {
         Ray ray = cam.ScreenPointToRay(eventData.position);

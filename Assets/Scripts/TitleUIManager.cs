@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using TMPro.EditorUtilities;
+
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
@@ -35,8 +35,16 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        EnterNickName();
-        PhotonNetwork.AutomaticallySyncScene = true;
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.AutomaticallySyncScene = true;
+            nickNameInput.gameObject.SetActive(false);
+        }
+        else
+        {
+            EnterNickName();
+            PhotonNetwork.AutomaticallySyncScene = true;
+        }
 
     }
 
@@ -47,13 +55,7 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
     }
     public void EnterNickName()
     {
-        nickNameInput.gameObject.SetActive(true);
-        
-
-
-
-
-        
+        nickNameInput.gameObject.SetActive(true); 
     }
 
     public void EnterNickNameButtonPressed()
@@ -135,5 +137,6 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         PhotonNetwork.LoadLevel("Room");
     }
+
 
 }
