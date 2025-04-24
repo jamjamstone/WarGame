@@ -19,7 +19,7 @@ public class CameraControl : MonoBehaviour
         }
         else
         {
-            Debug.Log("nonmaster");
+            //Debug.Log("nonmaster");
             var temp = GameManager.Instance.hostUnitSpawnPoint.transform.position;
             transform.position = new Vector3(temp.x, 100f, temp.z);
             Quaternion nonHostRoation = Quaternion.Euler(90, 0, 0);
@@ -55,7 +55,7 @@ public class CameraControl : MonoBehaviour
         }
         if(PhotonNetwork.IsMasterClient&&transform.position.z>=-60)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y,-60f);
+            transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
         }
         else if(!PhotonNetwork.IsMasterClient&&transform.position.z>=-60)
         {

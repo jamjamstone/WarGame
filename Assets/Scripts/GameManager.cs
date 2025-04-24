@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public PlayerManager playerManager;
 
     public List<GameObject> unitList=new List<GameObject>();//프리팹을 저장하는 방식으로
-    public List<GameObject> strategeList=new List<GameObject>();//프리팹을 저장하는 방식으로
+    public List<GameObject> strategeList=new List<GameObject>();//프리팹을 저장하는 방식으로 -> 전술카드는 구현 후순위로
 
     public GameObject hostUnitSpawnPoint;
     public GameObject nonHostUnitSpawnPoint;
