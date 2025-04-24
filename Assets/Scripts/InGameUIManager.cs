@@ -39,11 +39,16 @@ public class InGameUIManager : MonoBehaviour
     public delegate void moneyChanged();
     public event moneyChanged OnMoneyChanged;
 
+    public delegate void fadeOutEnd();
+    public event fadeOutEnd OnFadeOutEnd;
+
+
     // Start is called before the first frame update
     void Start()
     {
         unitInfoPanel.SetActive(false);
         OnMoneyChanged += SetMoneyToUI;
+        OnFadeOutEnd += FadeOutEnd;
         MakeUnitBuyButton();
         SetMoneyToUI();
     }
@@ -60,23 +65,23 @@ public class InGameUIManager : MonoBehaviour
     {
         sellUnits.Add(unit);
     }
-    public void BuyUnit(int index)
-    {
-        //Debug.Log("trbuy");
-        if (GameManager.Instance.playerManager.money < sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice)
-        {
-            Debug.Log(GameManager.Instance.playerManager.money);
-            Debug.Log(sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice);
-            OnBuyDenied();
-            return;
-        }
-        GameManager.Instance.unitManager.AddMyUnits(sellUnits[index].GetComponent<Unit>());
-       // Debug.Log("trbuy2");
-        var buyUnit = Instantiate(sellUnits[index].gameObject,GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
-       // Debug.Log("trbuy3");
-        GameManager.Instance.playerManager.money -= (int)sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice;
-        OnMoneyChanged?.Invoke();
-    }
+    //public void BuyUnit(int index)
+    //{
+    //    //Debug.Log("trbuy");
+    //    if (GameManager.Instance.playerManager.money < sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice)
+    //    {
+    //        //Debug.Log(GameManager.Instance.playerManager.money);
+    //        //Debug.Log(sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice);
+    //        OnBuyDenied();
+    //        return;
+    //    }
+    //    GameManager.Instance.unitManager.AddMyUnits(sellUnits[index].GetComponent<Unit>());
+    //   // Debug.Log("trbuy2");
+    //    var buyUnit = Instantiate(sellUnits[index].gameObject,GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
+    //   // Debug.Log("trbuy3");
+    //    GameManager.Instance.playerManager.money -= (int)sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice;
+    //    OnMoneyChanged?.Invoke();
+    //}
     public void BuyUnit(GameObject unit)
     {
         //Debug.Log("trbuy");
@@ -86,15 +91,17 @@ public class InGameUIManager : MonoBehaviour
             OnBuyDenied();
             return;
         }
-        GameManager.Instance.unitManager.AddMyUnits(unit.GetComponent<Unit>());
+        
         // Debug.Log("trbuy2");
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
+            var tempUnit=PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
+            GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
         }
         else
         {
-            PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
+           var tempUnit= PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
+            GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
         }
         
         var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
@@ -109,7 +116,12 @@ public class InGameUIManager : MonoBehaviour
         StartCoroutine(FadeOutBuyDenied());
     }
 
-
+    public void FadeOutEnd()
+    {
+        buyDenied.gameObject.SetActive(false);
+        colorAlpha = 1;
+        StopCoroutine(FadeOutBuyDenied());
+    }
     IEnumerator FadeOutBuyDenied()
     {
         var tempColor=Color.white;
@@ -117,7 +129,9 @@ public class InGameUIManager : MonoBehaviour
         {
             if (colorAlpha<0)
             {
+
                 yield return null;
+                OnFadeOutEnd?.Invoke();
             }
             yield return new WaitForSeconds(1);
             colorAlpha -= Time.deltaTime;
