@@ -8,28 +8,36 @@ using Photon.Pun;
 
 public class TitleUIManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] TMP_InputField nickNameInput;
+
+
+    [SerializeField] GameObject buttonsPanel;
     [SerializeField] Button createRoom;
     [SerializeField] Button joinRoom;
     [SerializeField] Button joinRandomRoom;
     [SerializeField] Button quitGame;
 
     [SerializeField] TMP_InputField roomNameInput;
+    
     [SerializeField] TMP_Text roomNameLogo;
+    
     [SerializeField] Button joinOrCreateRoomButton;
 
+    [SerializeField] TMP_Text jocrButtonText;
     private string roomName;
     private bool isCreateRoom = false;
     private bool isJoinRoom = false;
     private void Awake()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        roomNameInput.gameObject.SetActive(false);
+        buttonsPanel.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()
     {
-        
-        PhotonNetwork.JoinLobby();
-        roomNameInput.gameObject.SetActive(false);
+        EnterNickName();
+        PhotonNetwork.AutomaticallySyncScene = true;
+
     }
 
     // Update is called once per frame
@@ -37,15 +45,39 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
     {
         
     }
+    public void EnterNickName()
+    {
+        nickNameInput.gameObject.SetActive(true);
+        
 
+
+
+
+        
+    }
+
+    public void EnterNickNameButtonPressed()
+    {
+
+        PhotonNetwork.NickName = nickNameInput.text;
+
+        PhotonNetwork.ConnectUsingSettings();
+        
+        
+        nickNameInput.gameObject.SetActive(false);
+        //roomNameInput.gameObject.SetActive(true);
+        
+    }
     public void CreateRoomButtonPressed()
     {
         roomNameInput.gameObject.SetActive(true);
+        jocrButtonText.text = "Create Room";
         isCreateRoom = true;
     }
     public void JoinRoomButtonPressed()
     {
         roomNameInput.gameObject.SetActive(true);
+        jocrButtonText.text = "Join Room";
         isJoinRoom = true;
     }
     public void JoinRandomRoomButtonPressed()
@@ -71,20 +103,37 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.JoinRoom(roomName);
             isJoinRoom=false;
-
+            
         }
 
         if (isCreateRoom)
         {
             PhotonNetwork.CreateRoom(roomName);
             isCreateRoom=false;
+            
         }
-        roomNameInput.gameObject.SetActive(false);
+        //roomNameInput.gameObject.SetActive(false);
+
     }
 
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
 
+        //Debug.Log("connect");
+        PhotonNetwork.JoinLobby();
     }
+
+    public override void OnJoinedLobby()
+    {
+        //Debug.Log("join lob");
+        base.OnJoinedLobby();
+        buttonsPanel.SetActive(true);
+    }
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        PhotonNetwork.LoadLevel("Room");
+    }
+
 }
