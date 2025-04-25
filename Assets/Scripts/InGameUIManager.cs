@@ -15,6 +15,9 @@ public class InGameUIManager : MonoBehaviour
     [Header("Player")]
     public GameObject upperPanel;
     [SerializeField] TMP_Text playerLeftMoney;
+    [SerializeField] TMP_Text hostHp;
+    [SerializeField] TMP_Text guestHp;
+    [SerializeField] TMP_Text nowTurnText;
 
 
     [Header("UnitInfo")]
@@ -27,9 +30,15 @@ public class InGameUIManager : MonoBehaviour
     [Header("Shop")]
     public GameObject shopPanel;
     [SerializeField] TMP_Text buyDenied;
-
     [SerializeField] GameObject baseUnitButton;
 
+    [Header("Menu")]
+    [SerializeField] GameObject menuPanel;
+    [SerializeField] Button surrenderButton;
+    [SerializeField] Button quitButton;
+
+    [SerializeField] GameObject winText;
+    [SerializeField] GameObject defeatText;
 
 
     private bool isUnitInfoActivate = false;
@@ -43,12 +52,19 @@ public class InGameUIManager : MonoBehaviour
     public event fadeOutEnd OnFadeOutEnd;
 
 
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         unitInfoPanel.SetActive(false);
         OnMoneyChanged += SetMoneyToUI;
         OnFadeOutEnd += FadeOutEnd;
+        GameManager.Instance.OnGuestWin += GuestWinText;
+        GameManager.Instance.OnHostWin += HostWinText;
+        GameManager.Instance.turnManager.OnTurnChanged += SetTurnCount;
         MakeUnitBuyButton();
         SetMoneyToUI();
     }
@@ -59,29 +75,29 @@ public class InGameUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (menuPanel.activeSelf==true)
+            {
+                menuPanel.SetActive(false);
+            }
+            else
+            {
+                menuPanel.SetActive(true);
+            }
+        }
     }
+    public void SetTurnCount(int turn)
+    {
+        nowTurnText.text= turn.ToString();
+    }
+
+
     public void AddUnitToList(GameObject unit)
     {
         sellUnits.Add(unit);
     }
-    //public void BuyUnit(int index)
-    //{
-    //    //Debug.Log("trbuy");
-    //    if (GameManager.Instance.playerManager.money < sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice)
-    //    {
-    //        //Debug.Log(GameManager.Instance.playerManager.money);
-    //        //Debug.Log(sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice);
-    //        OnBuyDenied();
-    //        return;
-    //    }
-    //    GameManager.Instance.unitManager.AddMyUnits(sellUnits[index].GetComponent<Unit>());
-    //   // Debug.Log("trbuy2");
-    //    var buyUnit = Instantiate(sellUnits[index].gameObject,GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
-    //   // Debug.Log("trbuy3");
-    //    GameManager.Instance.playerManager.money -= (int)sellUnits[index].GetComponent<Unit>().unitInfo.unitPrice;
-    //    OnMoneyChanged?.Invoke();
-    //}
+    
     public void BuyUnit(GameObject unit)
     {
         //Debug.Log("trbuy");
@@ -104,7 +120,7 @@ public class InGameUIManager : MonoBehaviour
             GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
         }
         
-        var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
+        //var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
         // Debug.Log("trbuy3");
         GameManager.Instance.playerManager.money -= (int)unit.GetComponent<Unit>().unitInfo.unitPrice;
         OnMoneyChanged?.Invoke();
@@ -210,4 +226,47 @@ public class InGameUIManager : MonoBehaviour
         }
     }
     
+    public void QuitButtonPressed()
+    {
+        SurrenderButtonPressed();
+        Application.Quit();
+    }
+
+    public void SurrenderButtonPressed()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance.GuestWinGame();
+        }
+        else
+        {
+            GameManager.Instance.HostWinGame();
+        }
+    } 
+    
+    public void HostWinText()
+    {
+        if(PhotonNetwork.IsMasterClient)
+        {
+            winText.SetActive(true);
+        }
+        else
+        {
+            defeatText.SetActive(true);
+        }
+    }
+
+
+    public void GuestWinText()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            winText.SetActive(true);
+        }
+        else
+        {
+            defeatText.SetActive(true);
+        }
+    }
+
 }

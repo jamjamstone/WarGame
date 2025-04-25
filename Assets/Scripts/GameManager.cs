@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     private static GameManager gameManager;
     public InGameUIManager uiManager;
@@ -16,6 +17,13 @@ public class GameManager : MonoBehaviour
 
     public GameObject hostUnitSpawnPoint;
     public GameObject nonHostUnitSpawnPoint;
+
+    public delegate void HostWin();
+    public event HostWin OnHostWin;
+
+    public delegate void GuestWin();
+    public event GuestWin OnGuestWin;
+
 
     public static GameManager Instance
     {
@@ -66,6 +74,24 @@ public class GameManager : MonoBehaviour
     {
         strategeList.Add(stratege);
     }
+    public void HostWinGame()
+    {
+        photonView.RPC("RPCHostWin", RpcTarget.All);
+        
+    }
+    [PunRPC]
+    public void RPCHostWin()
+    {
+        OnHostWin?.Invoke();
+    }
 
-
+    public void GuestWinGame()
+    {
+        photonView.RPC("RPCGuestWin", RpcTarget.All);
+    }
+    [PunRPC]
+    public void RPCGuestWin()
+    {
+        OnGuestWin?.Invoke();
+    }
 }

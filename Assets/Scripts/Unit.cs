@@ -16,6 +16,10 @@ public class Unit : MonoBehaviourPun
     public UnitStateName unitState;
     public LayerMask targetLayerMask;
 
+    public bool canMove;
+
+
+
     public delegate void onDead(Unit unit);
     public event onDead OnDead;
 
@@ -34,6 +38,26 @@ public class Unit : MonoBehaviourPun
 
     public void GetHit(float dmg)
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            photonView.RPC("GetHitRPC", RpcTarget.All, dmg);
+        }
+        else
+        {
+            unitInfo.unitHP -= dmg;
+            if (unitInfo.unitHP < 0)
+            {
+                unitBody.useGravity = false;
+                unitCollider.enabled = false;
+                unitInfo.unitHP = 0;
+                UnitDie();
+            }
+        }
+
+    }
+    [PunRPC]
+    public void GetHitRPC(float dmg)
+    {
         unitInfo.unitHP -= dmg;
         if (unitInfo.unitHP < 0)
         {
@@ -42,11 +66,6 @@ public class Unit : MonoBehaviourPun
             unitInfo.unitHP = 0;
             UnitDie();
         }
-    }
-    [PunRPC]
-    public void GetHitRPC()
-    {
-
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -61,13 +80,31 @@ public class Unit : MonoBehaviourPun
     }
     public void UnitInit()
     {
-        if (unitInfo.isMine == true)
+        if (PhotonNetwork.IsConnected==false)
         {
-            gameObject.tag = "MyUnit";
+            if (unitInfo.isMine == true)
+            {
+                gameObject.tag = "MyUnit";
+                gameObject.layer = LayerMask.NameToLayer("MyUnit");
+            }
+            else
+            {
+                gameObject.tag = "EnemyUnit";
+                gameObject.layer = LayerMask.NameToLayer("EnemyUnit");
+            }
         }
         else
         {
-            gameObject.tag = "EnemyUnit";
+            if(photonView.IsMine == true)
+            {
+                gameObject.tag = "MyUnit";
+                gameObject.layer = LayerMask.NameToLayer("MyUnit");
+            }
+            else
+            {
+                gameObject.tag = "EnemyUnit";
+                gameObject.layer = LayerMask.NameToLayer("EnemyUnit");
+            }
         }
         
     }

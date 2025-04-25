@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    public List<GameObject> myUnits;
-    public List<GameObject> enemyUnits;
+    public List<Unit> myUnits;
+    public List<Unit> enemyUnits;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += StopUnitMove;
     }
 
     // Update is called once per frame
@@ -23,12 +23,19 @@ public class UnitManager : MonoBehaviour
     
     public void AddMyUnits(Unit unit)
     {
-        myUnits.Add(unit.gameObject);
+        myUnits.Add(unit);
+        unit.canMove = true;
     }
     public void AddEnemyUnit(Unit unit)
     {
-        enemyUnits.Add(unit.gameObject);
+        enemyUnits.Add(unit);
     }
-
+    public void StopUnitMove()
+    {
+        foreach (var unit in myUnits)
+        {
+            unit.canMove = false;
+        }
+    }
 
 }

@@ -42,6 +42,9 @@ MonoBehaviour:
   - ChangeReadyText
   - SetNickName
   - GetHitRPC
+  - RPCPhaseChange
+  - RPCGuestWin
+  - RPCHostWin
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
