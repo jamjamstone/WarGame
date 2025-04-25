@@ -65,6 +65,11 @@ public class InGameUIManager : MonoBehaviour
         GameManager.Instance.OnGuestWin += GuestWinText;
         GameManager.Instance.OnHostWin += HostWinText;
         GameManager.Instance.turnManager.OnTurnChanged += SetTurnCount;
+        GameManager.Instance.playerManager.OnHostHPChanged += SetHostHp;
+        GameManager.Instance.playerManager.OnGuestHPChanged += SetGuestHP;
+        SetHostHp(StaticField.maxPlayerHp);//오류
+        SetGuestHP(StaticField.maxPlayerHp);
+        SetTurnCount(0);
         MakeUnitBuyButton();
         SetMoneyToUI();
     }
@@ -91,8 +96,14 @@ public class InGameUIManager : MonoBehaviour
     {
         nowTurnText.text= turn.ToString();
     }
-
-
+    public void SetHostHp(float hp)
+    {
+        hostHp.text= hp.ToString();//오류
+    }
+    public void SetGuestHP(float hp)
+    {
+        guestHp.text= hp.ToString();
+    }
     public void AddUnitToList(GameObject unit)
     {
         sellUnits.Add(unit);

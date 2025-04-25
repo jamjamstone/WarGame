@@ -15,6 +15,8 @@ public class PlayerManager : MonoBehaviour
     public void ResetPlayerManager()
     {
         GameManager.Instance.turnManager.OnChangeToBuyPhase += ()=>AddMoney(500);//매턴 500추가
+        hostHP = StaticField.maxPlayerHp;
+        guestHP = StaticField.maxPlayerHp;
         ResetMoney();
     }
     public void ResetMoney()

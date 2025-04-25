@@ -1132,6 +1132,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &515916266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 515916267}
+  m_Layer: 0
+  m_Name: Static
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &515916267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515916266}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519365537
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,9 +1470,9 @@ MonoBehaviour:
   - {fileID: 8317065554445143560, guid: 88d90263d9923f1449466d2ed0726b96, type: 3}
   upperPanel: {fileID: 1316087994}
   playerLeftMoney: {fileID: 1829738112}
-  hostHp: {fileID: 0}
-  guestHp: {fileID: 0}
-  nowTurnText: {fileID: 0}
+  hostHp: {fileID: 55579789}
+  guestHp: {fileID: 331278151}
+  nowTurnText: {fileID: 121991311}
   unitInfoPanel: {fileID: 1001569906}
   unitInfoUnitName: {fileID: 2096656743}
   unitInfoUnitIcon: {fileID: 2000435543}
@@ -1537,7 +1568,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: 0
-  playerHP: 0
+  hostHP: 0
+  guestHP: 0
 --- !u!114 &684645359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3417,3 +3449,4 @@ SceneRoots:
   - {fileID: 463960352}
   - {fileID: 519365541}
   - {fileID: 213438483}
+  - {fileID: 515916267}
