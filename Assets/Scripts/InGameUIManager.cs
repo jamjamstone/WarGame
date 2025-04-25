@@ -160,7 +160,7 @@ public class InGameUIManager : MonoBehaviour
                 yield return null;
                 OnFadeOutEnd?.Invoke();
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.2f);
             colorAlpha -= Time.deltaTime;
             tempColor.a=colorAlpha;
             buyDenied.color = tempColor;
