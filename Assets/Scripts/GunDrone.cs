@@ -18,17 +18,16 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         //UnitInit();
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += SaveInitialPosition;
         //ChangeState(UnitStateName.Move);
-       // UnitActivate();
+        // UnitActivate();
     }
     private void FixedUpdate()
     {
         attackDelayTime += Time.fixedDeltaTime;
     }
-    public void ChangeState(UnitStateName stateName)
-    {
-        unitState = stateName;
-    }
+    
 
     public void SetDestination(Vector3 willDestination)
     {
@@ -59,7 +58,10 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, true);
-                    UnitMove();
+                    if (canMove)
+                    {
+                        UnitMove();
+                    }
                     break;
 
                 case UnitStateName.Dead:
@@ -89,11 +91,10 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-            Debug.Log("trydetect");
-            Debug.Log(detected[0].gameObject.name);
+           
             if (detected.Length > 0 && detected[0]?.tag == "EnemyUnit")
             {
-                Debug.Log("enemydetected");
+                
                 if (attackDelayTime > unitInfo.unitAttackSpeed)
                 {
                     UnitAttack(detected);
@@ -102,7 +103,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
             }
             else
             {
-                ChangeState(UnitStateName.Move);
+                photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
             }
 
 
@@ -113,8 +114,16 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     public void UnitAttack(Collider[] targets)//
     {
         attackDelayTime = 0;
-        ChangeState(UnitStateName.Attack);
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
         transform.LookAt(targets[0].gameObject.transform);
+        photonView.RPC("ShowMuzzleFlash", RpcTarget.All);
+        //Debug.Log(targets.Length);
+        targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+        
+    }
+    [PunRPC]
+    public void ShowMuzzleFlash()
+    {
         foreach (var muzzleFlash in muzzleFlashs)
         {
             if (muzzleFlash != null)
@@ -122,10 +131,8 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
                 muzzleFlash.Play();
             }
         }
-        //Debug.Log(targets.Length);
-        targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
-        
     }
+
 
     public void UnitMove()
     {

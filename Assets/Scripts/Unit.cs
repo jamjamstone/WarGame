@@ -16,6 +16,8 @@ public class Unit : MonoBehaviourPun
     public UnitStateName unitState;
     public LayerMask targetLayerMask;
 
+    public Vector3 initialPosition;
+    public Quaternion initialRotation;
     public bool canMove;
 
 
@@ -33,7 +35,7 @@ public class Unit : MonoBehaviourPun
     {
         
         OnDead?.Invoke(this);
-        Destroy(gameObject,2f);
+        gameObject.SetActive(false);
     }
 
     public void GetHit(float dmg)
@@ -54,6 +56,11 @@ public class Unit : MonoBehaviourPun
             }
         }
 
+    }
+    [PunRPC]
+    public void ChangeState(UnitStateName stateName)
+    {
+        unitState = stateName;
     }
     [PunRPC]
     public void GetHitRPC(float dmg)
@@ -77,6 +84,12 @@ public class Unit : MonoBehaviourPun
             distance = Vector3.Distance(cam.transform.position, hit.point);
             offset = transform.position - hit.point;
         }
+    }
+
+    public void SaveInitialPosition()
+    {
+        initialPosition=transform.position;
+        initialRotation=transform.rotation;
     }
     public void UnitInit()
     {

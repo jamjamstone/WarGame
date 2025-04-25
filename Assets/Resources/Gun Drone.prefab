@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2154284689123086553}
   - component: {fileID: 5429514468669090638}
   - component: {fileID: 2364899139915528172}
+  - component: {fileID: 1739273745284694765}
   m_Layer: 7
   m_Name: Gun Drone
   m_TagString: EnemyUnit
@@ -134,6 +135,8 @@ MonoBehaviour:
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  initialPosition: {x: 0, y: 0, z: 0}
+  initialRotation: {x: 0, y: 0, z: 0, w: 0}
   canMove: 0
   muzzleFlashs:
   - {fileID: 3771390420129841351}
@@ -189,6 +192,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1739273745284694765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541957152910842559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1001 &2901618788389515814
 PrefabInstance:
   m_ObjectHideFlags: 0

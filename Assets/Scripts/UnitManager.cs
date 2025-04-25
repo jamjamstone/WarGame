@@ -12,7 +12,9 @@ public class UnitManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += StopUnitMove;
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += StopUnitMove;
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += ResetUnitPosition;
+        
     }
 
     // Update is called once per frame
@@ -37,5 +39,23 @@ public class UnitManager : MonoBehaviour
             unit.canMove = false;
         }
     }
+    public void UnitMoveActivate()
+    {
+        foreach (var unit in myUnits)
+        {
+            unit.canMove = true;
+            
+        }
+    }
+
+    public void ResetUnitPosition()
+    {
+        foreach (var unit in myUnits)
+        {
+            unit.gameObject.transform.position=unit.initialPosition;
+            unit.gameObject.transform.rotation= unit.initialRotation;
+        }
+    }
+    
 
 }

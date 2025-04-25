@@ -20,12 +20,11 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         //UnitInit();
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += SaveInitialPosition;
         //ChangeState(UnitStateName.Move);
     }
-    public void ChangeState(UnitStateName stateName)
-    {
-        unitState=stateName;
-    }
+    
     
     public void SetDestination(Vector3 willDestination)
     {
@@ -37,6 +36,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         UnitInit();
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
+        photonView.RPC("ChangeState",RpcTarget.All,UnitStateName.Move);
     }
     IEnumerator StateAction()
     {
@@ -54,7 +54,10 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, false);
                     unitAnimator.SetBool(StaticField.hashMove, true);
-                    UnitMove();
+                    if (canMove)
+                    {
+                        UnitMove();
+                    }
                     break;
 
                 case UnitStateName.Dead:
@@ -88,11 +91,12 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
             if(detected.Length>1&&detected[1]?.tag == "EnemyUnit")
             {
                 //Debug.Log("enemydetected");
+                
                 UnitAttack(detected);
             }
             else
             {
-                ChangeState(UnitStateName.Move);
+                photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
             }
 
 
@@ -102,31 +106,26 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitAttack(Collider[] targets)//자폭 공격이라 특별 취급
     {
-        ChangeState(UnitStateName.Attack);
-        Debug.Log(targets.Length);
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
+        //Debug.Log(targets.Length);
         for(int i=0;i<targets.Length;i++)
-        {   
-            explosion.Play();
+        {
+            photonView.RPC("ShowExplosion", RpcTarget.All);
             targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
         }
     }
-
+    [PunRPC]
+    public void ShowExplosion()
+    {
+        explosion.Play();
+    }
     public void UnitMove()
     {
         unitBody.velocity = transform.forward * unitInfo.unitSpeed;
     }
     
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
+    
 
     
 
-    //public void OnDrag(PointerEventData eventData)
-    //{
-    //    Debug.Log("drag");
-    //    Vector3 mousePosition = new Vector3(Input.mousePosition.x,transform.position.y,Input.mousePosition.y);
-    //    transform.position = mousePosition;
-    //}
-}
+    }

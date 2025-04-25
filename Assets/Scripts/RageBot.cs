@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Photon.Pun;
 
 public class RageBot : Unit,IDragHandler, IPointerDownHandler
 {
@@ -21,12 +22,11 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
-        UnitActivate();
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += SaveInitialPosition;
+
     }
-    public void ChangeState(UnitStateName stateName)
-    {
-        unitState = stateName;
-    }
+    
 
     public void SetDestination(Vector3 willDestination)
     {
@@ -56,7 +56,10 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, false);
                     unitAnimator.SetBool(StaticField.hashMove, true);
-                    UnitMove();
+                    if (canMove)
+                    {
+                        UnitMove();
+                    }
                     break;
 
                 case UnitStateName.Dead:
@@ -94,7 +97,8 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             }
             else
             {
-                ChangeState(UnitStateName.Move);
+                photonView.RPC("DeactivateWeapon", RpcTarget.All);
+                photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
             }
 
 
@@ -107,12 +111,26 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         Vector3 direction = targets[0].transform.position - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1* Time.deltaTime);
-        ChangeState(UnitStateName.Attack);
-        flame1.SetActive(true);
-        flame2.SetActive(true);
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
+        photonView.RPC("ActivateWeapon", RpcTarget.All);
         //Debug.Log(targets.Length);
         //targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
     }
+    [PunRPC]
+    public void ActivateWeapon()
+    {
+        flame1.SetActive(true);
+        flame2.SetActive(true);
+    }
+
+    [PunRPC]
+    public void DeactivateWeapon()
+    {
+        flame1.SetActive(false);
+        flame2.SetActive(false);
+    }
+
+
 
     public void UnitMove()
     {
