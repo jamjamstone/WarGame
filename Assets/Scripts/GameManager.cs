@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject hostUnitSpawnPoint;
     public GameObject nonHostUnitSpawnPoint;
 
+    public GameObject playerCamera;
+
+
     public delegate void HostWin();
     public event HostWin OnHostWin;
 
@@ -61,6 +64,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         playerManager.ResetMoney();
+        Instantiate(playerCamera, Vector3.zero,Quaternion.identity);
     }
 
     // Update is called once per frame

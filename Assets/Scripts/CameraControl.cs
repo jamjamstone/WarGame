@@ -3,29 +3,61 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class CameraControl : MonoBehaviour
+public class CameraControl : MonoBehaviourPun
 {
     // Start is called before the first frame update
+
+
+
+    public bool isMaster;
     void Start()
     {
-        
-        if (PhotonNetwork.IsMasterClient)
+       
+
+    }
+    private void OnEnable()
+    {
+        SetInitialTransform();
+    }
+
+
+    public void SetInitialTransform()
+    {
+        if (photonView.IsMine)
         {
-            var temp = GameManager.Instance.hostUnitSpawnPoint.transform.position;
-            transform.position = new Vector3(temp.x,50f , temp.z);
-            Quaternion hostRotation = Quaternion.Euler(90, 0, 180);
-            transform.rotation =hostRotation;//x 90
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Quaternion nonHostRoation = Quaternion.Euler(90, 0, 0);
+                transform.rotation = nonHostRoation;
+                
+                var tempHost = GameManager.Instance.hostUnitSpawnPoint.transform.position;
+                transform.position = tempHost;// new Vector3(temp.x, 50f, temp.z);
+                
+                Debug.Log("master");
+                Debug.Log(tempHost);
+                isMaster = true;
+            }
+            else
+            {
+
+                Quaternion hostRotation = Quaternion.Euler(90, 0, 180);
+                transform.rotation = hostRotation;//x 90
+                var tempGuest = GameManager.Instance.nonHostUnitSpawnPoint.transform.position;
+                transform.position = tempGuest;//new Vector3(temp.x, 50f, temp.z);
+                
+                Debug.Log("guest");
+                Debug.Log(tempGuest);
+                isMaster = false;
+            }
+
+            gameObject.tag = "MainCamera";
+            Camera.SetupCurrent(gameObject.GetComponent<Camera>());
 
         }
         else
         {
-            //Debug.Log("nonmaster");
-            var temp = GameManager.Instance.nonHostUnitSpawnPoint.transform.position;
-            transform.position = new Vector3(temp.x, 50f, temp.z);
-            Quaternion nonHostRoation = Quaternion.Euler(90, 0, 0);
-            transform.rotation = nonHostRoation;//x 90, z 180
+            //gameObject.SetActive(false);
         }
-        
     }
 
     // Update is called once per frame

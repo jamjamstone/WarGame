@@ -128,13 +128,13 @@ public class InGameUIManager : MonoBehaviour
         // Debug.Log("trbuy2");
         if (PhotonNetwork.IsMasterClient)
         {
-            var tempUnit=PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
+            var tempUnit=PhotonNetwork.Instantiate(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
             GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
             //Debug.Log("spawnhostpos");
         }
         else
         {
-           var tempUnit= PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
+           var tempUnit= PhotonNetwork.Instantiate(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
             if (tempUnit != null)
             {
                 GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
@@ -151,6 +151,28 @@ public class InGameUIManager : MonoBehaviour
         GameManager.Instance.playerManager.money -= (int)unit.GetComponent<Unit>().unitInfo.unitPrice;
         OnMoneyChanged?.Invoke();
     }
+    public void MakeUnitBuyButton()
+    {
+        foreach (var unit in sellUnits)
+        {
+            
+            var tempUnit = unit;
+            var temp = Instantiate(baseUnitButton, shopPanel.transform);
+
+            temp.GetComponent<Button>().onClick.AddListener(() => BuyUnit(unit));//addlistner를 쓰기 위해서 람다식 사용
+
+            EventTrigger.Entry entry = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
+            entry.eventID = EventTriggerType.PointerEnter;//이벤트 아이디 할당
+            entry.callback.AddListener((eventData) => ShowUnitInfoByPoint(tempUnit.GetComponent<Unit>())); //함수 추가
+            temp.GetComponent<EventTrigger>().triggers.Add(entry);
+
+            EventTrigger.Entry entryExit = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
+            entryExit.eventID = EventTriggerType.PointerExit;//이벤트 아이디 할당
+            entryExit.callback.AddListener((eventData) => DisableUnitInfo()); //함수 추가
+            temp.GetComponent<EventTrigger>().triggers.Add(entryExit);
+        }
+    }
+
     public void OnBuyDenied()
     {
         buyDenied.gameObject.SetActive(true);
@@ -240,27 +262,6 @@ public class InGameUIManager : MonoBehaviour
         }
     }
 
-    public void MakeUnitBuyButton()
-    {
-        foreach(var unit in sellUnits)
-        {
-            Debug.Log(unit.name);
-            var tempUnit = unit;
-            var temp=Instantiate(baseUnitButton,shopPanel.transform);
-
-            temp.GetComponent<Button>().onClick.AddListener(()=>BuyUnit(unit));//addlistner를 쓰기 위해서 람다식 사용
-                                                                                  
-            EventTrigger.Entry entry = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
-            entry.eventID = EventTriggerType.PointerEnter;//이벤트 아이디 할당
-            entry.callback.AddListener((eventData) => ShowUnitInfoByPoint(tempUnit.GetComponent<Unit>())); //함수 추가
-            temp.GetComponent<EventTrigger>().triggers.Add(entry);
-
-            EventTrigger.Entry entryExit = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
-            entryExit.eventID = EventTriggerType.PointerExit;//이벤트 아이디 할당
-            entryExit.callback.AddListener((eventData) => DisableUnitInfo()); //함수 추가
-            temp.GetComponent<EventTrigger>().triggers.Add(entryExit);
-        }
-    }
     
     public void QuitButtonPressed()
     {
