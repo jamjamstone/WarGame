@@ -47,6 +47,9 @@ MonoBehaviour:
   - RPCHostWin
   - ChangeState
   - ShowExplosion
+  - ShowMuzzleFlash
+  - ActivateWeapon
+  - DeactivateWeapon
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -40,6 +40,8 @@ public class InGameUIManager : MonoBehaviour
     [SerializeField] GameObject winText;
     [SerializeField] GameObject defeatText;
 
+    [SerializeField] Button readyButton;
+    [SerializeField] TMP_Text readyButtonText;  
 
     private bool isUnitInfoActivate = false;
     private float colorAlpha = 1;
@@ -109,7 +111,7 @@ public class InGameUIManager : MonoBehaviour
         sellUnits.Add(unit);
     }
     
-    public void BuyUnit(GameObject unit)
+    public void BuyUnit(GameObject unit)// 호스트 아니면 유닛이 없다고 뜸
     {
         //Debug.Log("trbuy");
         if (GameManager.Instance.playerManager.money < unit.GetComponent<Unit>().unitInfo.unitPrice)
@@ -118,17 +120,30 @@ public class InGameUIManager : MonoBehaviour
             OnBuyDenied();
             return;
         }
-        
+        if (unit == null)
+        {
+            Debug.Log("unit=null");
+            return;
+        }
         // Debug.Log("trbuy2");
         if (PhotonNetwork.IsMasterClient)
         {
             var tempUnit=PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
             GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
+            //Debug.Log("spawnhostpos");
         }
         else
         {
            var tempUnit= PhotonNetwork.InstantiateRoomObject(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
-            GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
+            if (tempUnit != null)
+            {
+                GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
+            }
+            else
+            {
+                Debug.Log("unit null?");
+            }
+            //Debug.Log("spawnguestpos");
         }
         
         //var buyUnit = Instantiate(unit.gameObject, GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
@@ -199,7 +214,16 @@ public class InGameUIManager : MonoBehaviour
     {
 
     }
-
+    public void ReadyButtonPressed()
+    {
+        readyButtonText.text = "Ready!";
+        readyButton.enabled = false;
+    }
+    public void ReadyButtonActivate()
+    {
+        readyButton.enabled = true;
+        readyButtonText.text = "Not Ready!";
+    }
     public void ShowShop()//상점 보여주는 메서드
     {
         shopPanel.SetActive(true);
@@ -220,10 +244,11 @@ public class InGameUIManager : MonoBehaviour
     {
         foreach(var unit in sellUnits)
         {
+            Debug.Log(unit.name);
             var tempUnit = unit;
             var temp=Instantiate(baseUnitButton,shopPanel.transform);
 
-            temp.GetComponent<Button>().onClick.AddListener(()=>BuyUnit(tempUnit));//addlistner를 쓰기 위해서 람다식 사용
+            temp.GetComponent<Button>().onClick.AddListener(()=>BuyUnit(unit));//addlistner를 쓰기 위해서 람다식 사용
                                                                                   
             EventTrigger.Entry entry = new EventTrigger.Entry();//이벤트 트리거에 할당하기 위해서 엔트리 별도 생성
             entry.eventID = EventTriggerType.PointerEnter;//이벤트 아이디 할당

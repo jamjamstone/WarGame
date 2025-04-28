@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public event GuestWin OnGuestWin;
 
 
+    public bool isHostReady = false;
+    public bool isGuestReady = false;
+
     public static GameManager Instance
     {
         get {

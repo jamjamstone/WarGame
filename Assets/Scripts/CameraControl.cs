@@ -20,7 +20,7 @@ public class CameraControl : MonoBehaviour
         else
         {
             //Debug.Log("nonmaster");
-            var temp = GameManager.Instance.hostUnitSpawnPoint.transform.position;
+            var temp = GameManager.Instance.nonHostUnitSpawnPoint.transform.position;
             transform.position = new Vector3(temp.x, 50f, temp.z);
             Quaternion nonHostRoation = Quaternion.Euler(90, 0, 0);
             transform.rotation = nonHostRoation;//x 90, z 180

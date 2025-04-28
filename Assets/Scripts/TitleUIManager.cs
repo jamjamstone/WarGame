@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class TitleUIManager : MonoBehaviourPunCallbacks
 {
@@ -27,10 +28,14 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
     private string roomName;
     private bool isCreateRoom = false;
     private bool isJoinRoom = false;
+
+    private RoomOptions roomOptions = new RoomOptions();
+
     private void Awake()
     {
         roomNameInput.gameObject.SetActive(false);
         buttonsPanel.SetActive(false);
+        roomOptions.MaxPlayers = 2;
     }
     // Start is called before the first frame update
     void Start()
@@ -84,7 +89,9 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
     }
     public void JoinRandomRoomButtonPressed()
     {
-        PhotonNetwork.JoinRandomOrCreateRoom();
+        string randomeName = "room_" + Random.Range(1000, 9999);
+        //PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, null, null, null,roomOptions);
+        PhotonNetwork.JoinRandomOrCreateRoom(roomOptions: roomOptions);
     }
 
     public void QuitGameButtonPressed()
@@ -110,7 +117,8 @@ public class TitleUIManager : MonoBehaviourPunCallbacks
 
         if (isCreateRoom)
         {
-            PhotonNetwork.CreateRoom(roomName);
+            
+            PhotonNetwork.CreateRoom(roomName,roomOptions);
             isCreateRoom=false;
             
         }
