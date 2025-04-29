@@ -27,8 +27,11 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     {
         attackDelayTime += Time.fixedDeltaTime;
     }
-    
 
+    private void Awake()
+    {
+        UnitInit();
+    }
     public void SetDestination(Vector3 willDestination)
     {
         unitDestination = willDestination;
@@ -37,7 +40,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     {
         Debug.Log("act");
         
-        UnitInit();
+        
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);

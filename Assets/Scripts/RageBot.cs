@@ -26,7 +26,11 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
        
 
     }
-    
+    private void Awake()
+    {
+        UnitInit();
+        DeactivateWeapon();
+    }
 
     public void SetDestination(Vector3 willDestination)
     {
@@ -34,7 +38,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitActivate()
     {
-        UnitInit();
+        
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);

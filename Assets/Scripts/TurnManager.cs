@@ -64,16 +64,19 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
         if (isBuyPhase)//구매페이즈로 변경
         {
             Debug.Log("tobuy");
-            isBuyPhase = true;
+            this.isBuyPhase = true;
+            Debug.Log(isBuyPhase);
             buyPhaseTime = 0;
+            battlePhaseTime = 0;
             OnChangeToBuyPhase?.Invoke();
            
         }
         else//전투 페이즈로 변경
         {
             Debug.Log("tobattle");
-            isBuyPhase = false;
+            this.isBuyPhase = false;
             battlePhaseTime = 0;
+            buyPhaseTime = 0;
             OnChangeToBattlePhase?.Invoke();
         }
     }

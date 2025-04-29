@@ -189,6 +189,7 @@ public class InGameUIManager : MonoBehaviour
 
     public void OnBuyDenied()
     {
+        Debug.Log(GameManager.Instance.turnManager.isBuyPhase);
         buyDenied.gameObject.SetActive(true);
         colorAlpha = 1;
         StartCoroutine(FadeOutBuyDenied());

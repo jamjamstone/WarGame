@@ -24,8 +24,11 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         
         //ChangeState(UnitStateName.Move);
     }
-    
-    
+    private void Awake()
+    {
+        UnitInit();
+    }
+
     public void SetDestination(Vector3 willDestination)
     {
         unitDestination = willDestination;
@@ -34,7 +37,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     public void UnitActivate()
     {
         Debug.Log("act");
-        UnitInit();
+        
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState",RpcTarget.All,UnitStateName.Move);
