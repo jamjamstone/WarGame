@@ -23,7 +23,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
         GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += SaveInitialPosition;
+       
 
     }
     
@@ -37,6 +37,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         UnitInit();
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
 
     IEnumerator StateAction()

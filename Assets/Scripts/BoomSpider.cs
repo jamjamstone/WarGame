@@ -21,7 +21,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += SaveInitialPosition;
+        
         //ChangeState(UnitStateName.Move);
     }
     
@@ -33,6 +33,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     
     public void UnitActivate()
     {
+        Debug.Log("act");
         UnitInit();
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());

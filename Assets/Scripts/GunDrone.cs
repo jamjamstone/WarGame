@@ -19,7 +19,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += SaveInitialPosition;
+        
         //ChangeState(UnitStateName.Move);
         // UnitActivate();
     }
@@ -35,12 +35,15 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitActivate()
     {
-        
         Debug.Log("act");
+        
         UnitInit();
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
+
+    
 
     IEnumerator StateAction()
     {

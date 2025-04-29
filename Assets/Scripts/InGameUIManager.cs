@@ -18,6 +18,7 @@ public class InGameUIManager : MonoBehaviour
     [SerializeField] TMP_Text hostHp;
     [SerializeField] TMP_Text guestHp;
     [SerializeField] TMP_Text nowTurnText;
+    [SerializeField] TMP_Text leftTimeText;
 
 
     [Header("UnitInfo")]
@@ -93,6 +94,14 @@ public class InGameUIManager : MonoBehaviour
                 menuPanel.SetActive(true);
             }
         }
+        if (GameManager.Instance.turnManager.isBuyPhase == true)
+        {
+            leftTimeText.text=(StaticField.maximumBuyTime-GameManager.Instance.turnManager.buyPhaseTime).ToString();
+        }
+        else
+        {
+            leftTimeText.text = (StaticField.maximumBattleTime - GameManager.Instance.turnManager.battlePhaseTime).ToString();
+        }
     }
     public void SetTurnCount(int turn)
     {
@@ -114,9 +123,14 @@ public class InGameUIManager : MonoBehaviour
     public void BuyUnit(GameObject unit)// 호스트 아니면 유닛이 없다고 뜸
     {
         //Debug.Log("trbuy");
-        if (GameManager.Instance.playerManager.money < unit.GetComponent<Unit>().unitInfo.unitPrice)
+        if (GameManager.Instance.playerManager.money < unit.GetComponent<Unit>().unitInfo.unitPrice)//돈이 모자라면
         {
             
+            OnBuyDenied();
+            return;
+        }
+        if (GameManager.Instance.turnManager.isBuyPhase ==false)//배틀패이즈이면
+        {
             OnBuyDenied();
             return;
         }
@@ -128,13 +142,13 @@ public class InGameUIManager : MonoBehaviour
         // Debug.Log("trbuy2");
         if (PhotonNetwork.IsMasterClient)
         {
-            var tempUnit=PhotonNetwork.Instantiate(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, Quaternion.identity);
+            var tempUnit=PhotonNetwork.Instantiate(unit.name, GameManager.Instance.hostUnitSpawnPoint.transform.position, GameManager.Instance.hostUnitSpawnPoint.transform.rotation);
             GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());
             //Debug.Log("spawnhostpos");
         }
         else
         {
-           var tempUnit= PhotonNetwork.Instantiate(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, Quaternion.identity);
+           var tempUnit= PhotonNetwork.Instantiate(unit.name, GameManager.Instance.nonHostUnitSpawnPoint.transform.position, GameManager.Instance.nonHostUnitSpawnPoint.transform.rotation);
             if (tempUnit != null)
             {
                 GameManager.Instance.unitManager.AddMyUnits(tempUnit.GetComponent<Unit>());

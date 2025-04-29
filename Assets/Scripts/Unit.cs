@@ -18,7 +18,7 @@ public class Unit : MonoBehaviourPun
 
     public Vector3 initialPosition;
     public Quaternion initialRotation;
-    public bool canMove;
+    public bool canMove=true;
 
 
 
@@ -30,7 +30,10 @@ public class Unit : MonoBehaviourPun
     protected Camera cam;
     //public event Action OnDead;
 
-    
+    public void SetDontMove()
+    {
+        canMove = false;
+    }
     public void UnitDie()
     {
         
@@ -74,17 +77,7 @@ public class Unit : MonoBehaviourPun
             UnitDie();
         }
     }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Ray ray = cam.ScreenPointToRay(eventData.position);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            distance = Vector3.Distance(cam.transform.position, hit.point);
-            offset = transform.position - hit.point;
-        }
-    }
+    
 
     public void SaveInitialPosition()
     {
@@ -119,14 +112,37 @@ public class Unit : MonoBehaviourPun
                 gameObject.layer = LayerMask.NameToLayer("EnemyUnit");
             }
         }
+
+        GameManager.Instance.turnManager.OnChangeToBattlePhase += SetDontMove;
+
+
+
         
     }
     public void OnDrag(PointerEventData eventData)
     {
-        Ray ray = cam.ScreenPointToRay(eventData.position);
-        Vector3 newPos = ray.GetPoint(distance);
-        transform.position = newPos + offset;
-        transform.position = new Vector3(transform.position.x,0.1f,transform.position.z);
-        unitBody.velocity = Vector3.zero;
+        if (canMove == true)
+        {
+            Ray ray = cam.ScreenPointToRay(eventData.position);
+            Vector3 newPos = ray.GetPoint(distance);
+            transform.position = newPos + offset;
+            transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
+            unitBody.velocity = Vector3.zero;
+            SaveInitialPosition();
+        }
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (canMove == true)
+        {
+            Ray ray = cam.ScreenPointToRay(eventData.position);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                distance = Vector3.Distance(cam.transform.position, hit.point);
+                offset = transform.position - hit.point;
+            }
+        }
     }
 }
