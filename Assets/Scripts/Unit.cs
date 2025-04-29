@@ -63,6 +63,7 @@ public class Unit : MonoBehaviourPun
     [PunRPC]
     public void ChangeState(UnitStateName stateName)
     {
+        Debug.Log("changeto"+stateName);
         unitState = stateName;
     }
     [PunRPC]

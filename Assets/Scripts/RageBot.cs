@@ -43,7 +43,11 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
-
+    public void UnitDeactivate()
+    {
+        StopAllCoroutines();
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
+    }
     IEnumerator StateAction()
     {
         while (true)
@@ -52,15 +56,15 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             switch (unitState)
             {
                 case UnitStateName.Attack:
-                    unitAnimator.SetBool(StaticField.hashIdle, false);
-                    unitAnimator.SetBool(StaticField.hashAttack, true);
-                    unitAnimator.SetBool(StaticField.hashMove, false);
+                    //unitAnimator.SetBool(StaticField.hashIdle, false);
+                    //unitAnimator.SetBool(StaticField.hashAttack, true);
+                    //unitAnimator.SetBool(StaticField.hashMove, false);
                     
                     break;
                 case UnitStateName.Move:
-                    unitAnimator.SetBool(StaticField.hashIdle, false);
-                    unitAnimator.SetBool(StaticField.hashAttack, false);
-                    unitAnimator.SetBool(StaticField.hashMove, true);
+                    //unitAnimator.SetBool(StaticField.hashIdle, false);
+                    //unitAnimator.SetBool(StaticField.hashAttack, false);
+                    //unitAnimator.SetBool(StaticField.hashMove, true);
                     if (canMove)
                     {
                         UnitMove();
@@ -74,9 +78,9 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashDead, true);
                     break;
                 case UnitStateName.Idle:
-                    unitAnimator.SetBool(StaticField.hashIdle, true);
-                    unitAnimator.SetBool(StaticField.hashAttack, false);
-                    unitAnimator.SetBool(StaticField.hashMove, false);
+                    //unitAnimator.SetBool(StaticField.hashIdle, true);
+                    //unitAnimator.SetBool(StaticField.hashAttack, false);
+                    //unitAnimator.SetBool(StaticField.hashMove, false);
                     break;
                 default:
                     break;

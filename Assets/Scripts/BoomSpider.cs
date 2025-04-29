@@ -42,6 +42,11 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState",RpcTarget.All,UnitStateName.Move);
     }
+    public void UnitDeactivate()
+    {
+        StopAllCoroutines();
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
+    }
     IEnumerator StateAction()
     {
         while (true)

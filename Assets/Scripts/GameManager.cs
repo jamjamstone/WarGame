@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         playerManager.ResetMoney();
-       playerCameraScript= Instantiate(playerCameraPrefab, Vector3.zero,Quaternion.identity).GetComponent<CameraControl>();
+        playerCameraScript = Instantiate(playerCameraPrefab, Vector3.zero, Quaternion.identity).GetComponent<CameraControl>();
         playerCameraScript.SetInitialTransform();
     }
 

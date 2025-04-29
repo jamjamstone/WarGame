@@ -14,6 +14,7 @@ public class UnitManager : MonoBehaviour
     {
         GameManager.Instance.turnManager.OnChangeToBuyPhase += StopUnitMove;
         GameManager.Instance.turnManager.OnChangeToBuyPhase += ResetUnitPosition;
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += ReActiveUnits;
         
     }
 
@@ -57,5 +58,11 @@ public class UnitManager : MonoBehaviour
         }
     }
     
-
+    public void ReActiveUnits()
+    {
+        foreach (var unit in myUnits)
+        {
+            unit.gameObject.SetActive(true);
+        }
+    }
 }
