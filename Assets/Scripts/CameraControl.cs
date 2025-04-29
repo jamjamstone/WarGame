@@ -5,26 +5,14 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviourPun
 {
-    // Start is called before the first frame update
-
-
 
     public bool isMaster;
-    void Start()
-    {
-       
-
-    }
-    private void OnEnable()
-    {
-        SetInitialTransform();
-    }
 
 
     public void SetInitialTransform()
     {
-        if (photonView.IsMine)
-        {
+        Debug.Log("ss");
+        
             if (PhotonNetwork.IsMasterClient)
             {
                 Quaternion nonHostRoation = Quaternion.Euler(90, 0, 0);
@@ -53,20 +41,10 @@ public class CameraControl : MonoBehaviourPun
             gameObject.tag = "MainCamera";
             Camera.SetupCurrent(gameObject.GetComponent<Camera>());
 
-        }
-        else
-        {
-            //gameObject.SetActive(false);
-        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void FixedUpdate()
+    
+    private void FixedUpdate()//여기서 오류 나는듯? 
     {
         
         if (Input.GetKey(KeyCode.W))
@@ -89,7 +67,7 @@ public class CameraControl : MonoBehaviourPun
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
         }
-        else if(!PhotonNetwork.IsMasterClient&&transform.position.z>=-60)
+        if(!PhotonNetwork.IsMasterClient&&transform.position.z<=60)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
         }
@@ -108,5 +86,5 @@ public class CameraControl : MonoBehaviourPun
         }
     }
 
-
 }
+

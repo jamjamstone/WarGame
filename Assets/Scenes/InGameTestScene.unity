@@ -823,7 +823,8 @@ MonoBehaviour:
   strategeList: []
   hostUnitSpawnPoint: {fileID: 583436637}
   nonHostUnitSpawnPoint: {fileID: 463960351}
-  playerCamera: {fileID: 3604817914292111363, guid: 86a96ff3f9dc059418a3c74a96ffe15f, type: 3}
+  playerCameraPrefab: {fileID: 3604817914292111363, guid: 86a96ff3f9dc059418a3c74a96ffe15f, type: 3}
+  playerCameraScript: {fileID: 0}
   isHostReady: 0
   isGuestReady: 0
 --- !u!114 &375576759
@@ -1548,7 +1549,7 @@ Transform:
   m_GameObject: {fileID: 594274629}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.63, z: -188.27}
+  m_LocalPosition: {x: 0, y: 0.63, z: -17.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2774,7 +2775,7 @@ Transform:
   m_GameObject: {fileID: 1469675893}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.63, z: 187.7}
+  m_LocalPosition: {x: 0, y: 0.63, z: 12.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
