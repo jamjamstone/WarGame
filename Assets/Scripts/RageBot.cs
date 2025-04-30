@@ -44,7 +44,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
-    public void UnitDeactivate()
+    public override void UnitDeactivate()
     {
         StopAllCoroutines();
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
@@ -98,7 +98,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(0.1f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-            Debug.Log("detecting");
+            Debug.Log("detectingR");
             foreach (var d in detected)
             {
                 float dist = Vector3.Distance(transform.position, d.transform.position);

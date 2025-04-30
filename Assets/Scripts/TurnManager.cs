@@ -19,6 +19,9 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
     public delegate void TurnChanged(int nowTurn);
     public event TurnChanged OnTurnChanged;
 
+    public bool isHostReady = false;
+    public bool isGuestReady=false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +38,12 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            if(isHostReady&&isGuestReady&&isBuyPhase)
+            {
+                Debug.Log("tobattle by ready");
+                photonView.RPC("RPCPhaseChange", RpcTarget.All, false);
+            }
+
             if (isBuyPhase)
             {
                 buyPhaseTime += Time.fixedDeltaTime;
@@ -84,6 +93,8 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
             battlePhaseTime = 0;
             buyPhaseTime = 0;
             OnChangeToBattlePhase?.Invoke();
+            isGuestReady = false;
+            isHostReady = false;
             
         }
     }
@@ -95,12 +106,14 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
             stream.SendNext(buyPhaseTime);
             stream.SendNext(battlePhaseTime);
             stream.SendNext(isBuyPhase);
+            
         }
         else
         {
             buyPhaseTime = (float)stream.ReceiveNext();
             battlePhaseTime= (float)stream.ReceiveNext();   
             isBuyPhase= (bool)stream.ReceiveNext();
+           
 
         }
        

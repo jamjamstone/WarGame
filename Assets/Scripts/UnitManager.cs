@@ -15,7 +15,7 @@ public class UnitManager : MonoBehaviour
         GameManager.Instance.turnManager.OnChangeToBuyPhase += StopUnitMove;
         GameManager.Instance.turnManager.OnChangeToBuyPhase += ResetUnitPosition;
         GameManager.Instance.turnManager.OnChangeToBuyPhase += ReActiveUnits;
-        
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += DeactivateUnits;
     }
 
     // Update is called once per frame
@@ -29,7 +29,7 @@ public class UnitManager : MonoBehaviour
         myUnits.Add(unit);
         unit.canMove = true;
     }
-    public void AddEnemyUnit(Unit unit)
+    public void AddEnemyUnit(Unit unit)//현재 사용x
     {
         enemyUnits.Add(unit);
     }
@@ -65,4 +65,13 @@ public class UnitManager : MonoBehaviour
             unit.gameObject.SetActive(true);
         }
     }
+
+    public void DeactivateUnits()
+    {
+        foreach (var unit in myUnits)
+        {
+            unit.UnitDeactivate();
+        }
+    }
+
 }

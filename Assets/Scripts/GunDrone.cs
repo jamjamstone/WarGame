@@ -39,14 +39,14 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitActivate()
     {
-        Debug.Log("act");
+        
         
         
         StartCoroutine(StateAction());
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
-    public void UnitDeactivate()
+    public override void UnitDeactivate()
     {
         StopAllCoroutines();
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
@@ -101,7 +101,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-
+            Debug.Log("detectingG");
             foreach (var d in detected)
             {
                 float dist = Vector3.Distance(transform.position, d.transform.position);

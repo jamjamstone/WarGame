@@ -43,7 +43,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState",RpcTarget.All,UnitStateName.Move);
     }
-    public void UnitDeactivate()
+    public override void UnitDeactivate()
     {
         StopAllCoroutines();
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
@@ -96,6 +96,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
+            Debug.Log("detectingB");
             List<Unit> enemiesInRange = new List<Unit>();
             foreach (var d in detected)
             {

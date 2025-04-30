@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Photon.Pun;
-public class InGameUIManager : MonoBehaviour
+public class InGameUIManager : MonoBehaviourPun
 {
     public List<GameObject> sellUnits = new List<GameObject>();//기본적으로 유닛을 구매할 때 원래는 묶음 단위로 구매할까 했는데 단일로 구매하는걸로 변경
 
@@ -255,7 +255,29 @@ public class InGameUIManager : MonoBehaviour
     {
         readyButtonText.text = "Ready!";
         readyButton.enabled = false;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            
+            photonView.RPC("RPCHostReady", RpcTarget.All);
+        }
+        else
+        {
+            
+            photonView.RPC("RPCGuestReady", RpcTarget.All);
+        }
     }
+    [PunRPC]
+    public void RPCHostReady()
+    {
+        GameManager.Instance.turnManager.isHostReady = true;
+    }
+    [PunRPC]
+    public void RPCGuestReady()
+    {
+        GameManager.Instance.turnManager.isGuestReady = true;
+    }
+
+
     public void ReadyButtonActivate()
     {
         readyButton.enabled = true;

@@ -67,7 +67,7 @@ public class Unit : MonoBehaviourPun
     [PunRPC]
     public void ChangeState(UnitStateName stateName)
     {
-        Debug.Log("changeto"+stateName);
+        //Debug.Log("changeto"+stateName);
         unitState = stateName;
     }
     [PunRPC]
@@ -117,6 +117,13 @@ public class Unit : MonoBehaviourPun
 
 
     }
+
+    public virtual void UnitDeactivate()
+    {
+
+    }
+
+
     public void OnDrag(PointerEventData eventData)
     {
         if (canMove == true)
