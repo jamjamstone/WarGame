@@ -21,6 +21,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
         
         //ChangeState(UnitStateName.Move);
     }
@@ -51,7 +52,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             switch (unitState)
             {
                 case UnitStateName.Attack:
@@ -63,10 +64,9 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, false);
                     unitAnimator.SetBool(StaticField.hashMove, true);
-                    if (canMove)
-                    {
+                   
                         UnitMove();
-                    }
+                    
                     break;
 
                 case UnitStateName.Dead:
@@ -96,12 +96,19 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
-
-            if(detected.Length>1&&detected[1]?.tag == "EnemyUnit")
+            List<Unit> enemiesInRange = new List<Unit>();
+            foreach (var d in detected)
             {
-                //Debug.Log("enemydetected");
-                
-                UnitAttack(detected);
+                Unit unit = d.GetComponent<Unit>();
+                if (unit != null && unit.ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    enemiesInRange.Add(unit);
+                }
+            }
+
+            if (enemiesInRange.Count > 0)
+            {
+                UnitAttack(enemiesInRange); // 자폭 공격
             }
             else
             {
@@ -113,15 +120,22 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
 
         }
     }
-    public void UnitAttack(Collider[] targets)//자폭 공격이라 특별 취급
+    public void UnitAttack(List<Unit> targets)//자폭 공격이라 특별 취급
     {
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
         //Debug.Log(targets.Length);
-        for(int i=0;i<targets.Length;i++)
+        //for(int i=0;i<targets.Length;i++)
+        //{
+        //    photonView.RPC("ShowExplosion", RpcTarget.All);
+        //    targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+        //}
+        foreach (Unit enemy in targets)
         {
             photonView.RPC("ShowExplosion", RpcTarget.All);
-            targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+            enemy.GetHit(unitInfo.unitATK);
         }
+        gameObject.SetActive(false);
+
     }
     [PunRPC]
     public void ShowExplosion()
@@ -130,7 +144,11 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitMove()
     {
-        unitBody.velocity = transform.forward * unitInfo.unitSpeed;
+        Debug.Log("spidermove");
+        Vector3 move = transform.forward; // XZ 방향 이동
+
+        unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+        //unitBody.velocity = transform.forward * unitInfo.unitSpeed;
     }
     
     

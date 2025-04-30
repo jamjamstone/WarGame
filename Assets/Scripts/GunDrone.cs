@@ -19,7 +19,8 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
+
         //ChangeState(UnitStateName.Move);
         // UnitActivate();
     }
@@ -56,7 +57,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             switch (unitState)
             {
                 case UnitStateName.Attack:
@@ -68,10 +69,9 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, true);
-                    if (canMove)
-                    {
+                    
                         UnitMove();
-                    }
+                    
                     break;
 
                 case UnitStateName.Dead:
@@ -101,15 +101,26 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-           
-            if (detected.Length > 0 && detected[0]?.tag == "EnemyUnit")
-            {
-                
-                if (attackDelayTime > unitInfo.unitAttackSpeed)
-                {
-                    UnitAttack(detected);
-                }
 
+            foreach (var d in detected)
+            {
+                float dist = Vector3.Distance(transform.position, d.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    targetCollider = d;
+                }
+            }
+
+
+
+
+
+            if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed)
+            {
+                //Debug.Log("enemydetected");
+
+                UnitAttack(detected);
             }
             else
             {
@@ -146,7 +157,11 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
     public void UnitMove()
     {
-        unitBody.velocity = transform.forward * unitInfo.unitSpeed;
+        Debug.Log("move!");
+        Vector3 move = transform.forward; // XZ 방향 이동
+
+        unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+       // unitBody.velocity = transform.forward * unitInfo.unitSpeed;
     }
 
     //public void OnDrag(PointerEventData eventData)

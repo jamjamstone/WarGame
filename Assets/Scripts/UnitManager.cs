@@ -53,7 +53,7 @@ public class UnitManager : MonoBehaviour
     {
         foreach (var unit in myUnits)
         {
-            unit.gameObject.transform.position=unit.initialPosition;
+            unit.gameObject.transform.position=unit.initialPosition;//null
             unit.gameObject.transform.rotation= unit.initialRotation;
         }
     }

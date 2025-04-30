@@ -23,7 +23,10 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        photonView.RPC("RPCPhaseChange", RpcTarget.All, true);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("RPCPhaseChange", RpcTarget.All, true);
+        }
       
     }
 
@@ -42,14 +45,14 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (buyPhaseTime >= StaticField.maximumBuyTime)
             {
-                
+                Debug.Log("tobattle");
                 photonView.RPC("RPCPhaseChange", RpcTarget.All, false);//배틀 패이즈로
             }
             if (battlePhaseTime >= StaticField.maximumBattleTime)
             {
                 photonView.RPC("RPCPhaseChange", RpcTarget.All, true);//구매 페이즈로
-                turnCount++;
-                OnTurnChanged?.Invoke(turnCount);
+                
+               
             }
 
         }
@@ -63,21 +66,25 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
         Debug.Log("turnrpc");
         if (isBuyPhase)//구매페이즈로 변경
         {
+            turnCount++;
+            OnTurnChanged?.Invoke(turnCount);
             Debug.Log("tobuy");
             this.isBuyPhase = true;
             Debug.Log(isBuyPhase);
             buyPhaseTime = 0;
             battlePhaseTime = 0;
-            OnChangeToBuyPhase?.Invoke();
+            OnChangeToBuyPhase?.Invoke();//null2
            
         }
         else//전투 페이즈로 변경
         {
             Debug.Log("tobattle");
+            
             this.isBuyPhase = false;
             battlePhaseTime = 0;
             buyPhaseTime = 0;
             OnChangeToBattlePhase?.Invoke();
+            
         }
     }
 

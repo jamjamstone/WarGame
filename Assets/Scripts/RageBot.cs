@@ -23,7 +23,8 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
         GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-       
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
+
 
     }
     private void Awake()
@@ -52,7 +53,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             switch (unitState)
             {
                 case UnitStateName.Attack:
@@ -65,10 +66,9 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, true);
-                    if (canMove)
-                    {
+                    
                         UnitMove();
-                    }
+                    
                     break;
 
                 case UnitStateName.Dead:
@@ -99,9 +99,23 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             yield return new WaitForSeconds(0.1f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
 
-            if (detected.Length > 0 && detected[0]?.tag == "EnemyUnit")
+            foreach (var d in detected)
+            {
+                float dist = Vector3.Distance(transform.position, d.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    targetCollider = d;
+                }
+            }
+
+
+
+            
+            if (targetCollider != null)
             {
                 //Debug.Log("enemydetected");
+
                 UnitAttack(detected);
             }
             else
@@ -109,7 +123,6 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                 photonView.RPC("DeactivateWeapon", RpcTarget.All);
                 photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
             }
-
 
 
 
@@ -143,7 +156,11 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
 
     public void UnitMove()
     {
-        unitBody.velocity = transform.forward * unitInfo.unitSpeed;
+        Vector3 move = transform.forward; // XZ 방향 이동
+        
+        unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+        //unitBody.velocity = transform.forward * unitInfo.unitSpeed;
+        Debug.Log("ragemove");
     }
 
     //public void OnDrag(PointerEventData eventData)

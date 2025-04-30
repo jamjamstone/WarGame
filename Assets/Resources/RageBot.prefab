@@ -355,10 +355,13 @@ MonoBehaviour:
   unitState: 0
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64
   initialPosition: {x: 0, y: 0, z: 0}
   initialRotation: {x: 0, y: 0, z: 0, w: 0}
   canMove: 0
+  targetCollider: {fileID: 0}
+  minDist: Infinity
+  ownPlayerNumber: 0
   flame1: {fileID: 6697241144234418095}
   flame2: {fileID: 2318627362150547829}
 --- !u!54 &8074570393131592449

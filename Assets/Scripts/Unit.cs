@@ -20,7 +20,8 @@ public class Unit : MonoBehaviourPun
     public Quaternion initialRotation;
     public bool canMove=true;
 
-
+    public Collider targetCollider;
+    public float minDist = Mathf.Infinity;
 
     public delegate void onDead(Unit unit);
     public event onDead OnDead;
@@ -28,6 +29,9 @@ public class Unit : MonoBehaviourPun
     private float distance;
     private Vector3 offset;
     protected Camera cam;
+
+    public int ownPlayerNumber;
+
     //public event Action OnDead;
 
     public void SetDontMove()
@@ -36,7 +40,7 @@ public class Unit : MonoBehaviourPun
     }
     public void UnitDie()
     {
-        
+        Debug.Log("dead");
         OnDead?.Invoke(this);
         gameObject.SetActive(false);
     }
@@ -78,47 +82,40 @@ public class Unit : MonoBehaviourPun
             UnitDie();
         }
     }
-    
 
+    [PunRPC]
     public void SaveInitialPosition()
     {
         initialPosition=transform.position;
         initialRotation=transform.rotation;
     }
+
+
+    [PunRPC]
+    public void RPCSaveInitialPosition()
+    {
+        photonView.RPC("SaveInitialPosition", RpcTarget.All);
+    }
     public void UnitInit()
     {
         if (PhotonNetwork.IsConnected==false)
         {
-            if (unitInfo.isMine == true)
-            {
-                gameObject.tag = "MyUnit";
-                gameObject.layer = LayerMask.NameToLayer("MyUnit");
-            }
-            else
-            {
-                gameObject.tag = "EnemyUnit";
-                gameObject.layer = LayerMask.NameToLayer("EnemyUnit");
-            }
+            
         }
         else
         {
-            if(photonView.IsMine == true)
-            {
-                gameObject.tag = "MyUnit";
-                gameObject.layer = LayerMask.NameToLayer("MyUnit");
-            }
-            else
-            {
-                gameObject.tag = "EnemyUnit";
-                gameObject.layer = LayerMask.NameToLayer("EnemyUnit");
-            }
+
+
+            gameObject.layer = LayerMask.NameToLayer("Unit");
+            ownPlayerNumber = photonView.Owner.ActorNumber;
+            
         }
-
+        targetLayerMask = LayerMask.NameToLayer("Unit");
         GameManager.Instance.turnManager.OnChangeToBattlePhase += SetDontMove;
+        RPCSaveInitialPosition();
 
 
 
-        
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -129,7 +126,7 @@ public class Unit : MonoBehaviourPun
             transform.position = newPos + offset;
             transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
             unitBody.velocity = Vector3.zero;
-            SaveInitialPosition();
+            RPCSaveInitialPosition();
         }
     }
     public void OnPointerDown(PointerEventData eventData)
