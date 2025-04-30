@@ -98,7 +98,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(0.1f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-
+            Debug.Log("detecting");
             foreach (var d in detected)
             {
                 float dist = Vector3.Distance(transform.position, d.transform.position);
@@ -156,11 +156,11 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
 
     public void UnitMove()
     {
-        Vector3 move = transform.forward; // XZ 방향 이동
+        //Vector3 move = transform.forward; // XZ 방향 이동
+        //
+        //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+        unitBody.velocity = transform.forward * unitInfo.unitSpeed * StaticField.speedModifieValue;
         
-        unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
-        //unitBody.velocity = transform.forward * unitInfo.unitSpeed;
-        Debug.Log("ragemove");
     }
 
     //public void OnDrag(PointerEventData eventData)

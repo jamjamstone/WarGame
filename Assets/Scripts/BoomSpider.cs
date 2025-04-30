@@ -144,11 +144,11 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitMove()
     {
-        Debug.Log("spidermove");
-        Vector3 move = transform.forward; // XZ 방향 이동
-
-        unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
-        //unitBody.velocity = transform.forward * unitInfo.unitSpeed;
+        
+        //Vector3 move = transform.forward; // XZ 방향 이동
+        //
+        //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+        unitBody.velocity = transform.forward * unitInfo.unitSpeed*StaticField.speedModifieValue;
     }
     
     

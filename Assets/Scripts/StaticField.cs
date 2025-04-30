@@ -11,7 +11,7 @@ public static class StaticField
     public static float maximumBuyTime = 200f;
     public static float maxPlayerHp = 1000;
 
-
+    public static int speedModifieValue = 2;
 
     public readonly static int hashIdle = Animator.StringToHash("isIdle");
     public readonly static int hashDead = Animator.StringToHash("isDead");
