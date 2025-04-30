@@ -725,6 +725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rageBotInfo: {fileID: 11400000, guid: 3e4e83c058a433b42866587c9519802a, type: 2}
+  ragebot: {fileID: 8242473591514873681}
 --- !u!1001 &6697241144234383629
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -849,6 +850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rageBotInfo: {fileID: 11400000, guid: 3e4e83c058a433b42866587c9519802a, type: 2}
+  ragebot: {fileID: 8242473591514873681}
 --- !u!4 &6697241144234771343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: b2e8413438f79464aa69948979b150a8, type: 3}

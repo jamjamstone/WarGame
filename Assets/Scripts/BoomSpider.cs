@@ -98,6 +98,8 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
             Debug.Log("detectingB");
             List<Unit> enemiesInRange = new List<Unit>();
+            targetCollider = null;
+            minDist = float.MaxValue;
             foreach (var d in detected)
             {
                 Unit unit = d.GetComponent<Unit>();
@@ -124,12 +126,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     public void UnitAttack(List<Unit> targets)//자폭 공격이라 특별 취급
     {
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
-        //Debug.Log(targets.Length);
-        //for(int i=0;i<targets.Length;i++)
-        //{
-        //    photonView.RPC("ShowExplosion", RpcTarget.All);
-        //    targets[i].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
-        //}
+        
         foreach (Unit enemy in targets)
         {
             photonView.RPC("ShowExplosion", RpcTarget.All);
@@ -151,9 +148,18 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
         unitBody.velocity = transform.forward * unitInfo.unitSpeed*StaticField.speedModifieValue;
     }
-    
-    
 
-    
 
+    private void OnTriggerEnter(Collider other)
+    {
+        var temp = other.GetComponent<PlayerUnit>();
+        if (other.tag == "Player"&&temp.ownPlayerNumber!=ownPlayerNumber)
+        {
+            gameObject.SetActive(false);
+            temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
+            
+        }
     }
+
+
+}

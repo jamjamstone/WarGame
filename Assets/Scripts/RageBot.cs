@@ -60,6 +60,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, true);
                     //unitAnimator.SetBool(StaticField.hashMove, false);
+                    unitBody.velocity = Vector3.zero;
                     
                     break;
                 case UnitStateName.Move:
@@ -99,6 +100,8 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             yield return new WaitForSeconds(0.1f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
             Debug.Log("detectingR");
+            targetCollider = null;
+            minDist = float.MaxValue;
             foreach (var d in detected)
             {
                 float dist = Vector3.Distance(transform.position, d.transform.position);
@@ -110,13 +113,13 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             }
 
 
-
+            Debug.Log(targetCollider.gameObject.name);
             
-            if (targetCollider != null)
+            if (targetCollider != null&& targetCollider.GetComponent<Unit>().ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
             {
                 //Debug.Log("enemydetected");
 
-                UnitAttack(detected);
+                UnitAttack(targetCollider);
             }
             else
             {
@@ -128,9 +131,10 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
 
         }
     }
-    public void UnitAttack(Collider[] targets)//
+    public void UnitAttack(Collider target)//
     {
-        Vector3 direction = targets[0].transform.position - transform.position;
+        unitBody.velocity = Vector3.zero;
+        Vector3 direction = target.transform.position - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1* Time.deltaTime);
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
@@ -169,4 +173,15 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     //    Vector3 mousePosition = new Vector3(Input.mousePosition.x,transform.position.y,Input.mousePosition.y);
     //    transform.position = mousePosition;
     //}
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("triggerrr");
+        var temp = other.GetComponent<PlayerUnit>();
+        if (other.tag == "Player")// && temp.ownPlayerNumber != ownPlayerNumber)
+        {
+            Debug.Log("player?");
+            gameObject.SetActive(false);
+            temp.PlayerGetDemage(unitInfo.unitATK+unitInfo.unitHP);
+        }
+    }
 }

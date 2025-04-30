@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public delegate void GuestWin();
     public event GuestWin OnGuestWin;
 
+    public GameObject playerColliderPrefab;
+
+
 
     public bool isHostReady = false;
     public bool isGuestReady = false;
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         playerManager.ResetMoney();
         playerCameraScript = Instantiate(playerCameraPrefab, Vector3.zero, Quaternion.identity).GetComponent<CameraControl>();
         playerCameraScript.SetInitialTransform();
+        playerManager.SpawnPlayerCollider();
     }
 
     // Update is called once per frame

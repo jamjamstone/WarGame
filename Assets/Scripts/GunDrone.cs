@@ -102,6 +102,8 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
             yield return new WaitForSeconds(1);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
             Debug.Log("detectingG");
+            targetCollider = null;
+            minDist = float.MaxValue;
             foreach (var d in detected)
             {
                 float dist = Vector3.Distance(transform.position, d.transform.position);
@@ -116,11 +118,11 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
 
 
-            if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed)
+            if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed&&targetCollider.GetComponent<Unit>().ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
             {
                 //Debug.Log("enemydetected");
 
-                UnitAttack(detected);
+                UnitAttack(targetCollider);
             }
             else
             {
@@ -132,14 +134,14 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
         }
     }
-    public void UnitAttack(Collider[] targets)//
+    public void UnitAttack(Collider target)//
     {
         attackDelayTime = 0;
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
-        transform.LookAt(targets[0].gameObject.transform);
+        transform.LookAt(target.gameObject.transform);
         photonView.RPC("ShowMuzzleFlash", RpcTarget.All);
         //Debug.Log(targets.Length);
-        targets[0].gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
+        target.gameObject.GetComponent<Unit>().GetHit(unitInfo.unitATK);
         
     }
     [PunRPC]
@@ -170,4 +172,14 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     //    Vector3 mousePosition = new Vector3(Input.mousePosition.x,transform.position.y,Input.mousePosition.y);
     //    transform.position = mousePosition;
     //}
+    private void OnTriggerEnter(Collider other)
+    {
+        
+        var temp = other.GetComponent<PlayerUnit>();
+        if (other.tag == "Player" && temp.ownPlayerNumber != ownPlayerNumber)
+        {
+            gameObject.SetActive(false);
+            temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
+        }
+    }
 }

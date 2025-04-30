@@ -110,7 +110,7 @@ public class Unit : MonoBehaviourPun
             ownPlayerNumber = photonView.Owner.ActorNumber;
             
         }
-        targetLayerMask = LayerMask.NameToLayer("Unit");
+        
         GameManager.Instance.turnManager.OnChangeToBattlePhase += SetDontMove;
         RPCSaveInitialPosition();
 
