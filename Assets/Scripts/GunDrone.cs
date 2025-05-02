@@ -106,6 +106,10 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
             minDist = float.MaxValue;
             foreach (var d in detected)
             {
+                if (d.gameObject == this.gameObject)
+                {
+                    continue;
+                }
                 float dist = Vector3.Distance(transform.position, d.transform.position);
                 if (dist < minDist)
                 {

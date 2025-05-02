@@ -40,7 +40,7 @@ public class Unit : MonoBehaviourPun
     }
     public void UnitDie()
     {
-        Debug.Log("dead");
+        //Debug.Log("dead");
         OnDead?.Invoke(this);
         gameObject.SetActive(false);
     }

@@ -102,6 +102,10 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
             minDist = float.MaxValue;
             foreach (var d in detected)
             {
+                if (d.gameObject == this.gameObject)
+                {
+                    continue;
+                }
                 Unit unit = d.GetComponent<Unit>();
                 if (unit != null && unit.ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
                 {
