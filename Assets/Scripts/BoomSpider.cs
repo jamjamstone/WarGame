@@ -94,7 +94,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.05f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
             Debug.Log("detectingB");
             List<Unit> enemiesInRange = new List<Unit>();
@@ -107,7 +107,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
                     continue;
                 }
                 Unit unit = d.GetComponent<Unit>();
-                if (unit != null && unit.ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
+                if (unit != null && unit.ownPlayerNumber != ownPlayerNumber)
                 {
                     enemiesInRange.Add(unit);
                 }

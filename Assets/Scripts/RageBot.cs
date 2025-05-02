@@ -97,7 +97,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
             Debug.Log("detectingR");
             targetCollider = null;
@@ -117,9 +117,9 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             }
 
 
-            Debug.Log(targetCollider.gameObject.name);
+            //Debug.Log(targetCollider.gameObject.name);
             
-            if (targetCollider != null&& targetCollider.GetComponent<Unit>().ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
+            if (targetCollider != null&& targetCollider.GetComponent<Unit>().ownPlayerNumber != ownPlayerNumber)
             {
                 //Debug.Log("enemydetected");
 

@@ -99,7 +99,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.05f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
             Debug.Log("detectingG");
             targetCollider = null;
@@ -122,7 +122,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
 
 
-            if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed&&targetCollider.GetComponent<Unit>().ownPlayerNumber != PhotonNetwork.LocalPlayer.ActorNumber)
+            if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed && targetCollider.GetComponent<Unit>().ownPlayerNumber != ownPlayerNumber)
             {
                 //Debug.Log("enemydetected");
 
