@@ -63,14 +63,14 @@ public class CameraControl : MonoBehaviourPun
         {
             transform.Translate(Vector3.left);
         }
-        if(PhotonNetwork.IsMasterClient&&transform.position.z>=-60)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
-        }
-        if(!PhotonNetwork.IsMasterClient&&transform.position.z<=60)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
-        }
+        //if(PhotonNetwork.IsMasterClient&&transform.position.z>=-60)
+        //{
+        //    transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
+        //}
+        //if(!PhotonNetwork.IsMasterClient&&transform.position.z<=60)
+        //{
+        //    transform.position = new Vector3(transform.position.x, transform.position.y, -60f);
+        //}
         if (Input.mouseScrollDelta.y < 0)
         {
             transform.Translate(Vector3.back*5);

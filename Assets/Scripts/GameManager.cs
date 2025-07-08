@@ -5,11 +5,12 @@ using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    
     private static GameManager gameManager;
     public InGameUIManager uiManager;
     public TurnManager turnManager;
     public UnitManager unitManager;
-    public StrategeManager strategeManager;
+    //public StrategeManager strategeManager;
     public PlayerManager playerManager;
     
 
@@ -61,6 +62,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+
+        OnHostWin += playerManager.ResetPlayerManager;
+        OnGuestWin += playerManager.ResetPlayerManager;
     }
 
     // Start is called before the first frame update
@@ -70,13 +74,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         playerCameraScript = Instantiate(playerCameraPrefab, Vector3.zero, Quaternion.identity).GetComponent<CameraControl>();
         playerCameraScript.SetInitialTransform();
         playerManager.SpawnPlayerCollider();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        playerManager.ResetPlayerManager();
         
     }
+
+    
 
     public void AddUnitToList(GameObject unit)
     {

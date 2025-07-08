@@ -22,8 +22,8 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
         //ChangeState(UnitStateName.Move);
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
+        //GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        //GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
 
 
     }
@@ -37,17 +37,23 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     {
         unitDestination = willDestination;
     }
-    public void UnitActivate()
+    public override void UnitActivate()
     {
-        
-        StartCoroutine(StateAction());
-        StartCoroutine(DetectEnemy());
+        stateActionCo = StartCoroutine(StateAction());
+        detectCo = StartCoroutine(DetectEnemy());
+        //StartCoroutine(StateAction());
+        //StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
     public override void UnitDeactivate()
     {
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
+        Debug.Log("fire Unit deactivated");
         StopAllCoroutines();
-        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
+        StopCoroutine(detectCo);
+        StopCoroutine(stateActionCo);
+        DeactivateWeapon();
+        //photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
     }
     IEnumerator StateAction()
     {
@@ -67,8 +73,21 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, true);
-                    
-                        UnitMove();
+                    if (targetCollider == null)
+                    {
+                        if (PhotonNetwork.MasterClient.ActorNumber == ownPlayerNumber)
+                        {
+                            transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                        }
+                        else
+                        {
+                            transform.rotation = Quaternion.LookRotation(Vector3.back);
+
+                        }
+
+                    }
+
+                    UnitMove();
                     
                     break;
 
@@ -99,7 +118,7 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(0.05f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-            Debug.Log("detectingR");
+            //Debug.Log("detectingR");
             targetCollider = null;
             minDist = float.MaxValue;
             foreach (var d in detected)
@@ -162,14 +181,18 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
 
 
 
-    public void UnitMove()
-    {
-        //Vector3 move = transform.forward; // XZ 방향 이동
-        //
-        //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
-        unitBody.velocity = transform.forward * unitInfo.unitSpeed * StaticField.speedModifieValue;
-        
-    }
+   // public void UnitMove()
+   // {
+   //     //Vector3 move = transform.forward; // XZ 방향 이동
+   //     //
+   //     //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+   //     if (canMove == false)
+   //     {
+   //         return;
+   //     }
+   //     unitBody.velocity = transform.forward * unitInfo.unitSpeed * StaticField.speedModifieValue;
+   //     
+   // }
 
     //public void OnDrag(PointerEventData eventData)
     //{
@@ -177,15 +200,15 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     //    Vector3 mousePosition = new Vector3(Input.mousePosition.x,transform.position.y,Input.mousePosition.y);
     //    transform.position = mousePosition;
     //}
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("triggerrr");
-        var temp = other.GetComponent<PlayerUnit>();
-        if (other.tag == "Player")// && temp.ownPlayerNumber != ownPlayerNumber)
-        {
-            Debug.Log("player?");
-            gameObject.SetActive(false);
-            temp.PlayerGetDemage(unitInfo.unitATK+unitInfo.unitHP);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    //Debug.Log("triggerrr");
+    //    var temp = other.GetComponent<PlayerUnit>();
+    //    if (other.tag == "Player")// && temp.ownPlayerNumber != ownPlayerNumber)
+    //    {
+    //        Debug.Log("player?");
+    //        gameObject.SetActive(false);
+    //        temp.PlayerGetDemage(unitInfo.unitATK+unitInfo.unitHP);
+    //    }
+    //}
 }

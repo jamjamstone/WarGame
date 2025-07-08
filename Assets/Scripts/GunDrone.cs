@@ -11,6 +11,8 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     private float attackRadius=7;
     [SerializeField] ParticleSystem[] muzzleFlashs;
     private float attackDelayTime = 0;
+    //Coroutine stateActionCo;
+    //Coroutine detectCo;
     // Start is called before the first frame update
     private void Start()
     {
@@ -18,14 +20,22 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         //UnitInit();
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
+        //GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        //GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
 
         //ChangeState(UnitStateName.Move);
         // UnitActivate();
     }
     private void FixedUpdate()
     {
+        //if(unitState == UnitStateName.Attack)
+        //{
+        //    attackDelayTime += Time.fixedDeltaTime;
+        //}
+        //else
+        //{
+        //    attackDelayTime = 0;
+        //}
         attackDelayTime += Time.fixedDeltaTime;
     }
 
@@ -37,19 +47,24 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     {
         unitDestination = willDestination;
     }
-    public void UnitActivate()
+    public override void UnitActivate()
     {
-        
-        
-        
-        StartCoroutine(StateAction());
-        StartCoroutine(DetectEnemy());
+
+        stateActionCo = StartCoroutine(StateAction());
+        detectCo = StartCoroutine(DetectEnemy());
+
+        //StartCoroutine(StateAction());
+        //StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Move);
     }
     public override void UnitDeactivate()
     {
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
+        Debug.Log("gun Unit deactivated");
         StopAllCoroutines();
-        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
+        StopCoroutine(detectCo);
+        StopCoroutine(stateActionCo);
+        //photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
     }
     
 
@@ -69,8 +84,20 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, true);
-                    
-                        UnitMove();
+                    if (targetCollider == null)
+                    {
+                        if (PhotonNetwork.MasterClient.ActorNumber==ownPlayerNumber)//호스트의 공격 유닛
+                        {
+                            transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                        }
+                        else
+                        {
+                            transform.rotation = Quaternion.LookRotation(Vector3.back);
+
+                        }
+
+                    }
+                    UnitMove();
                     
                     break;
 
@@ -101,7 +128,7 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(0.05f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius, targetLayerMask);
-            Debug.Log("detectingG");
+            //Debug.Log("detectingG");
             targetCollider = null;
             minDist = float.MaxValue;
             foreach (var d in detected)
@@ -121,11 +148,11 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
 
 
-
+            Debug.Log(attackDelayTime);
             if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed && targetCollider.GetComponent<Unit>().ownPlayerNumber != ownPlayerNumber)
             {
                 //Debug.Log("enemydetected");
-
+                Debug.Log("건드론 공격");
                 UnitAttack(targetCollider);
             }
             else
@@ -161,14 +188,18 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     }
 
 
-    public void UnitMove()
-    {
-       
-        //Vector3 move = transform.forward; // XZ 방향 이동
-        //
-        //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
-        unitBody.velocity = transform.forward * unitInfo.unitSpeed * StaticField.speedModifieValue;
-    }
+    //public void UnitMove()
+    //{
+    //   
+    //    //Vector3 move = transform.forward; // XZ 방향 이동
+    //    //
+    //    //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+    //    if(canMove == false)
+    //    {
+    //        return;
+    //    }
+    //    unitBody.velocity = transform.forward * unitInfo.unitSpeed * StaticField.speedModifieValue;
+    //}
 
     //public void OnDrag(PointerEventData eventData)
     //{
@@ -176,14 +207,14 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     //    Vector3 mousePosition = new Vector3(Input.mousePosition.x,transform.position.y,Input.mousePosition.y);
     //    transform.position = mousePosition;
     //}
-    private void OnTriggerEnter(Collider other)
-    {
-        
-        var temp = other.GetComponent<PlayerUnit>();
-        if (other.tag == "Player" && temp.ownPlayerNumber != ownPlayerNumber)
-        {
-            gameObject.SetActive(false);
-            temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    
+    //    var temp = other.GetComponent<PlayerUnit>();
+    //    if (other.tag == "Player" && temp.ownPlayerNumber != ownPlayerNumber)
+    //    {
+    //        gameObject.SetActive(false);
+    //        temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
+    //    }
+    //}
 }

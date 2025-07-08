@@ -7,7 +7,7 @@ public static class StaticField
     public static int MaxCardCost = 5;
     public static int MaxUnitCost = 5;
     public static int startMoney = 500;
-    public static float maximumBattleTime = 100f;
+    public static float maximumBattleTime = 50f;
     public static float maximumBuyTime = 200f;
     public static float maxPlayerHp = 1000;
 

@@ -9,9 +9,10 @@ public class RageBotWeapon : MonoBehaviour
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Unit"&&other.GetComponent<Unit>().ownPlayerNumber!=ragebot.ownPlayerNumber)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Unit")&&other.GetComponent<Unit>().ownPlayerNumber!=ragebot.ownPlayerNumber)
         {
             other.GetComponent<Unit>().GetHit(rageBotInfo.unitATK);
+            Debug.Log("rage hit");
         }
     }
 }

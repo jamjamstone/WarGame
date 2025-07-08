@@ -18,7 +18,7 @@ public class Unit : MonoBehaviourPun
 
     public Vector3 initialPosition;
     public Quaternion initialRotation;
-    public bool canMove=true;
+    [SerializeField] bool canMove=true;// 유닛을 마우스 드래그로 움직일 수 있는지 여부
 
     public Collider targetCollider;
     public float minDist = Mathf.Infinity;
@@ -31,18 +31,24 @@ public class Unit : MonoBehaviourPun
     protected Camera cam;
 
     public int ownPlayerNumber;
-
+    protected Coroutine stateActionCo;
+    protected Coroutine detectCo;
     //public event Action OnDead;
 
     public void SetDontMove()
     {
         canMove = false;
     }
+    public void  SetCanMove()
+    {
+        canMove = true;
+    }
     public void UnitDie()
     {
         //Debug.Log("dead");
         OnDead?.Invoke(this);
         gameObject.SetActive(false);
+
     }
 
     public void GetHit(float dmg)
@@ -111,18 +117,35 @@ public class Unit : MonoBehaviourPun
             
         }
         
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += SetDontMove;
+        //GameManager.Instance.turnManager.OnChangeToBattlePhase += SetDontMove;
         RPCSaveInitialPosition();
 
 
 
     }
+    public void UnitMove()
+    {
 
+        //Vector3 move = transform.forward; // XZ 방향 이동
+        //
+        //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+        
+        unitBody.velocity = transform.forward * unitInfo.unitSpeed * StaticField.speedModifieValue;
+    }
+    /// <summary>
+    /// 유닛이 비전투 상태로 전환 될 때 호출되는 메소드
+    /// </summary>
     public virtual void UnitDeactivate()
+    {
+        
+    }
+    /// <summary>
+    /// 유닛이 전투 상태로 전환되었을 때 호출되는 메소드.
+    /// </summary>
+    public virtual void UnitActivate()
     {
 
     }
-
 
     public void OnDrag(PointerEventData eventData)
     {

@@ -40,7 +40,7 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
         {
             if(isHostReady&&isGuestReady&&isBuyPhase)
             {
-                Debug.Log("tobattle by ready");
+                //Debug.Log("tobattle by ready");
                 photonView.RPC("RPCPhaseChange", RpcTarget.All, false);
             }
 
@@ -54,7 +54,7 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
             }
             if (buyPhaseTime >= StaticField.maximumBuyTime)
             {
-                Debug.Log("tobattle");
+                //Debug.Log("tobattle");
                 photonView.RPC("RPCPhaseChange", RpcTarget.All, false);//배틀 패이즈로
             }
             if (battlePhaseTime >= StaticField.maximumBattleTime)
@@ -72,14 +72,16 @@ public class TurnManager : MonoBehaviourPunCallbacks,IPunObservable
     [PunRPC]
     public void RPCPhaseChange(bool isBuyPhase)
     {
-        Debug.Log("turnrpc");
+        
         if (isBuyPhase)//구매페이즈로 변경
         {
+            isHostReady = false;
+            isGuestReady = false;
             turnCount++;
             OnTurnChanged?.Invoke(turnCount);
-            Debug.Log("tobuy");
+            //Debug.Log("tobuy");
             this.isBuyPhase = true;
-            Debug.Log(isBuyPhase);
+            //Debug.Log(isBuyPhase);
             buyPhaseTime = 0;
             battlePhaseTime = 0;
             OnChangeToBuyPhase?.Invoke();//null2

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: GunDrone
   m_EditorClassIdentifier: 
   unitName: GunDrone
-  unitHP: 150
+  unitHP: 0
   unitATK: 100
   unitSpeed: 7
   unitDescription: 
-  unitAttackSpeed: 0
+  unitAttackSpeed: 15
   unitNumber: 0
   isMine: 0
   unitPrice: 100

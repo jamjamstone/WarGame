@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviourPun
 {
     public int money=StaticField.startMoney;
-    public float hostHP;
-    public float guestHP;
+    public float hostHP=StaticField.maxPlayerHp;
+    public float guestHP=StaticField.maxPlayerHp;   
 
     public delegate void PlayerHPChanged(float hp);
     public event PlayerHPChanged OnHostHPChanged;
@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviourPun
     public Transform hostPlayerpos;
     public Transform guestPlayerpos;
 
+    
     public void ResetPlayerManager()
     {
         GameManager.Instance.turnManager.OnChangeToBuyPhase += ()=>AddMoney(500);//매턴 500추가
@@ -27,6 +28,7 @@ public class PlayerManager : MonoBehaviourPun
     {
         money=StaticField.startMoney;
     }
+    
     public void SpawnPlayerCollider()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -64,6 +66,7 @@ public class PlayerManager : MonoBehaviourPun
         
     }
 
+    [PunRPC]
     public void RPCHostHP(float hp)
     {
         hostHP = hp;
@@ -81,10 +84,12 @@ public class PlayerManager : MonoBehaviourPun
         photonView.RPC("RPCGuestHP", RpcTarget.All, guestHP-dmg);
         if (guestHP <= 0)
         {
+
             GameManager.Instance.HostWinGame();
         }
     }
 
+    [PunRPC]
     public void RPCGuestHP(float hp)
     {
         guestHP = hp;

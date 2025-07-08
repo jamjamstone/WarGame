@@ -20,8 +20,8 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         //UnitInit();
         cam = Camera.main;
         GameManager.Instance.unitManager.AddMyUnits(this);
-        GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
-        GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
+        //GameManager.Instance.turnManager.OnChangeToBattlePhase += UnitActivate;
+        //GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitDeactivate;
         
         //ChangeState(UnitStateName.Move);
     }
@@ -35,18 +35,22 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         unitDestination = willDestination;
     }
     
-    public void UnitActivate()
+    public override void UnitActivate()
     {
-        Debug.Log("act");
-        
-        StartCoroutine(StateAction());
-        StartCoroutine(DetectEnemy());
+        // Debug.Log("act");
+        gameObject.SetActive(true);
+        stateActionCo= StartCoroutine(StateAction());
+        detectCo = StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState",RpcTarget.All,UnitStateName.Move);
     }
     public override void UnitDeactivate()
     {
+        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
         StopAllCoroutines();
-        photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.None);
+        StopCoroutine(detectCo);
+        StopCoroutine(stateActionCo);
+        Debug.Log("spider Unit deactivated");
+        
     }
     IEnumerator StateAction()
     {
@@ -64,8 +68,20 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, false);
                     unitAnimator.SetBool(StaticField.hashMove, true);
-                   
-                        UnitMove();
+                    if (targetCollider == null)
+                    {
+                        if (PhotonNetwork.MasterClient.ActorNumber == ownPlayerNumber)
+                        {
+                            transform.rotation = Quaternion.LookRotation(Vector3.forward);
+                        }
+                        else
+                        {
+                            transform.rotation = Quaternion.LookRotation(Vector3.back);
+
+                        }
+
+                    }
+                    UnitMove();
                     
                     break;
 
@@ -96,7 +112,7 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         {
             yield return new WaitForSeconds(0.05f);
             var detected = Physics.OverlapSphere(transform.position, attackRadius,targetLayerMask);
-            Debug.Log("detectingB");
+            //Debug.Log("detectingB");
             List<Unit> enemiesInRange = new List<Unit>();
             targetCollider = null;
             minDist = float.MaxValue;
@@ -142,28 +158,35 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     [PunRPC]
     public void ShowExplosion()
     {
+        //explosion.gameObject.transform.SetParent(null);
         explosion.Play();
-    }
-    public void UnitMove()
-    {
         
-        //Vector3 move = transform.forward; // XZ 방향 이동
-        //
-        //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
-        unitBody.velocity = transform.forward * unitInfo.unitSpeed*StaticField.speedModifieValue;
+
     }
+    //public void UnitMove()
+    //{
+    //
+    //    //Vector3 move = transform.forward; // XZ 방향 이동
+    //    //
+    //    //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
+    //    if (canMove == false)
+    //    {
+    //        return;
+    //    }
+    //    unitBody.velocity = transform.forward * unitInfo.unitSpeed*StaticField.speedModifieValue;
+    //}
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        var temp = other.GetComponent<PlayerUnit>();
-        if (other.tag == "Player"&&temp.ownPlayerNumber!=ownPlayerNumber)
-        {
-            gameObject.SetActive(false);
-            temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
-            
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    var temp = other.GetComponent<PlayerUnit>();
+    //    if (other.tag == "Player"&&temp.ownPlayerNumber!=ownPlayerNumber)
+    //    {
+    //        gameObject.SetActive(false);
+    //        temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
+    //        
+    //    }
+    //}
 
 
 }

@@ -46,6 +46,7 @@ public class InGameUIManager : MonoBehaviourPun
 
     private bool isUnitInfoActivate = false;
     private float colorAlpha = 1;
+    private bool isGameEnd = false;
     
 
     public delegate void moneyChanged();
@@ -94,6 +95,10 @@ public class InGameUIManager : MonoBehaviourPun
                 menuPanel.SetActive(true);
             }
         }
+        if (isGameEnd==true)
+        {
+            return;
+        }
         if (GameManager.Instance.turnManager.isBuyPhase == true)
         {
             leftTimeText.text=(StaticField.maximumBuyTime-GameManager.Instance.turnManager.buyPhaseTime).ToString();
@@ -120,7 +125,7 @@ public class InGameUIManager : MonoBehaviourPun
         sellUnits.Add(unit);
     }
     
-    public void BuyUnit(GameObject unit)// 호스트 아니면 유닛이 없다고 뜸
+    public void BuyUnit(GameObject unit)
     {
         //Debug.Log("trbuy");
         if (GameManager.Instance.playerManager.money < unit.GetComponent<Unit>().unitInfo.unitPrice)//돈이 모자라면
@@ -200,6 +205,10 @@ public class InGameUIManager : MonoBehaviourPun
         buyDenied.gameObject.SetActive(false);
         colorAlpha = 1;
         StopCoroutine(FadeOutBuyDenied());
+    }
+    public void GameEnd()
+    {
+        isGameEnd = true;
     }
     IEnumerator FadeOutBuyDenied()
     {
@@ -328,6 +337,7 @@ public class InGameUIManager : MonoBehaviourPun
         {
             defeatText.SetActive(true);
         }
+        isGameEnd = true;
     }
 
 
@@ -341,6 +351,7 @@ public class InGameUIManager : MonoBehaviourPun
         {
             defeatText.SetActive(true);
         }
+        isGameEnd = true;
     }
 
 }
