@@ -60,8 +60,11 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
     public override void UnitDeactivate()
     {
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
-        Debug.Log("gun Unit deactivated");
+        //Debug.Log("gun Unit deactivated");
         StopAllCoroutines();
+        unitBody.velocity = Vector3.zero;
+        gameObject.transform.position = initialPosition;
+        gameObject.transform.rotation = initialRotation;
         StopCoroutine(detectCo);
         StopCoroutine(stateActionCo);
         //photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
@@ -76,6 +79,8 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
             switch (unitState)
             {
                 case UnitStateName.Attack:
+                    unitBody.velocity = Vector3.zero;
+                    transform.LookAt(targetCollider.transform);
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, true);
                     //unitAnimator.SetBool(StaticField.hashMove, false);
@@ -108,6 +113,9 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashDead, true);
                     break;
                 case UnitStateName.Idle:
+                    unitBody.velocity = Vector3.zero;
+                    gameObject.transform.position = initialPosition;
+                    gameObject.transform.rotation = initialRotation;
                     //unitAnimator.SetBool(StaticField.hashIdle, true);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, false);
@@ -148,11 +156,11 @@ public class GunDrone : Unit,IDragHandler, IPointerDownHandler
 
 
 
-            Debug.Log(attackDelayTime);
+            //Debug.Log(attackDelayTime);
             if (targetCollider != null && attackDelayTime > unitInfo.unitAttackSpeed && targetCollider.GetComponent<Unit>().ownPlayerNumber != ownPlayerNumber)
             {
                 //Debug.Log("enemydetected");
-                Debug.Log("건드론 공격");
+                //Debug.Log("건드론 공격");
                 UnitAttack(targetCollider);
             }
             else

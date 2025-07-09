@@ -14,6 +14,7 @@ public class UnitInfo :ScriptableObject
     public int unitNumber;
     public bool isMine;
     public int unitPrice;
+    public Texture unitIcon;
 
 
 }

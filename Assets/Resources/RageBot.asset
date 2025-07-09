@@ -17,7 +17,8 @@ MonoBehaviour:
   unitATK: 40
   unitSpeed: 4
   unitDescription: 
-  unitAttackSpeed: 0
+  unitAttackSpeed: 5
   unitNumber: 0
   isMine: 0
   unitPrice: 300
+  unitIcon: {fileID: 2800000, guid: c29f5fd5a18b2ff469f8fe7c0a932e6a, type: 3}

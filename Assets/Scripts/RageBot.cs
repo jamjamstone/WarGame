@@ -48,7 +48,10 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
     public override void UnitDeactivate()
     {
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
-        Debug.Log("fire Unit deactivated");
+        //Debug.Log("fire Unit deactivated");
+        unitBody.velocity = Vector3.zero;
+        gameObject.transform.position = initialPosition;
+        gameObject.transform.rotation = initialRotation;
         StopAllCoroutines();
         StopCoroutine(detectCo);
         StopCoroutine(stateActionCo);
@@ -63,10 +66,12 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
             switch (unitState)
             {
                 case UnitStateName.Attack:
+                    unitBody.velocity = Vector3.zero;
+                    transform.LookAt(targetCollider.transform);
                     //unitAnimator.SetBool(StaticField.hashIdle, false);
                     //unitAnimator.SetBool(StaticField.hashAttack, true);
                     //unitAnimator.SetBool(StaticField.hashMove, false);
-                    unitBody.velocity = Vector3.zero;
+                    
                     
                     break;
                 case UnitStateName.Move:
@@ -98,6 +103,9 @@ public class RageBot : Unit,IDragHandler, IPointerDownHandler
                     //unitAnimator.SetBool(StaticField.hashDead, true);
                     break;
                 case UnitStateName.Idle:
+                    unitBody.velocity = Vector3.zero;
+                    gameObject.transform.position = initialPosition;
+                    gameObject.transform.rotation = initialRotation;
                     //unitAnimator.SetBool(StaticField.hashIdle, true);
                     //unitAnimator.SetBool(StaticField.hashAttack, false);
                     //unitAnimator.SetBool(StaticField.hashMove, false);

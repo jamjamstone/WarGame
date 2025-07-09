@@ -22,3 +22,4 @@ MonoBehaviour:
   unitNumber: 20
   isMine: 1
   unitPrice: 50
+  unitIcon: {fileID: 2800000, guid: 21ac431b42c75b4499872f252d0a4bb1, type: 3}

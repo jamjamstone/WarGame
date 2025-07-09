@@ -18,6 +18,8 @@ public class UnitManager : MonoBehaviour
         //GameManager.Instance.turnManager.OnChangeToBuyPhase += ReActiveUnitsModel;
 
         GameManager.Instance.turnManager.OnChangeToBuyPhase += UnitMoveActivate;
+
+
         GameManager.Instance.turnManager.OnChangeToBattlePhase+=UnitBattleActivate;
         GameManager.Instance.turnManager.OnChangeToBattlePhase+= StopUnitMove;
     }
@@ -64,7 +66,7 @@ public class UnitManager : MonoBehaviour
     {
         foreach (var unit in myUnits)
         {
-            unit.gameObject.transform.position=unit.initialPosition;//null
+            unit.gameObject.transform.position=unit.initialPosition;
             unit.gameObject.transform.rotation= unit.initialRotation;
         }
     }
@@ -95,6 +97,6 @@ public class UnitManager : MonoBehaviour
 
         }
         ReActiveUnitsModel();
-        //Debug.Log("unit battle deactivate");
+        Debug.Log("unit battle deactivate");
     }
 }

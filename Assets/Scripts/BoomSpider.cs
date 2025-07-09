@@ -10,10 +10,10 @@ using UnityEngine.EventSystems;
 public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
 {
     private float attackRadius = 5;
-    
-    
 
-    public ParticleSystem explosion;
+
+    public GameObject selfRenderer;
+    public GameObject explosion;
     private void Start()
     {
         //targetLayerMask = LayerMask.NameToLayer("EnemyUnit");
@@ -42,14 +42,19 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
         stateActionCo= StartCoroutine(StateAction());
         detectCo = StartCoroutine(DetectEnemy());
         photonView.RPC("ChangeState",RpcTarget.All,UnitStateName.Move);
+        selfRenderer.SetActive(true);
     }
     public override void UnitDeactivate()
     {
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Idle);
         StopAllCoroutines();
+        selfRenderer.SetActive(true);
+        unitBody.velocity = Vector3.zero;
+        gameObject.transform.position = initialPosition;
+        gameObject.transform.rotation = initialRotation;
         StopCoroutine(detectCo);
         StopCoroutine(stateActionCo);
-        Debug.Log("spider Unit deactivated");
+        //Debug.Log("spider Unit deactivated");
         
     }
     IEnumerator StateAction()
@@ -60,6 +65,8 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
             switch (unitState)
             {
                 case UnitStateName.Attack:
+                    unitBody.velocity = Vector3.zero;
+                    transform.LookAt(targetCollider.transform);
                     unitAnimator.SetBool(StaticField.hashIdle, false);
                     unitAnimator.SetBool(StaticField.hashAttack, true);
                     unitAnimator.SetBool(StaticField.hashMove, false);
@@ -92,6 +99,9 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
                     unitAnimator.SetBool(StaticField.hashDead, true);
                     break;
                 case UnitStateName.Idle:
+                    unitBody.velocity= Vector3.zero;
+                    gameObject.transform.position = initialPosition;
+                    gameObject.transform.rotation = initialRotation;
                     unitAnimator.SetBool(StaticField.hashIdle, true);
                     unitAnimator.SetBool(StaticField.hashAttack, false);
                     unitAnimator.SetBool(StaticField.hashMove, false);
@@ -132,6 +142,8 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
             if (enemiesInRange.Count > 0)
             {
                 UnitAttack(enemiesInRange); // 자폭 공격
+                photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
+                StopCoroutine(detectCo);
             }
             else
             {
@@ -145,48 +157,69 @@ public class BoomSpider : Unit,IDragHandler, IPointerDownHandler
     }
     public void UnitAttack(List<Unit> targets)//자폭 공격이라 특별 취급
     {
+        unitBody.velocity = Vector3.zero;
+
+        //StopCoroutine(detectCo);
         photonView.RPC("ChangeState", RpcTarget.All, UnitStateName.Attack);
-        
+        photonView.RPC("ShowExplosion", RpcTarget.All);
+        targetCollider = targets[0].GetComponent<Collider>();
+        // 폭발 효과를 위해 잠시 대기
         foreach (Unit enemy in targets)
         {
-            photonView.RPC("ShowExplosion", RpcTarget.All);
+            
             enemy.GetHit(unitInfo.unitATK);
         }
+        StartCoroutine(DelayCoroutine(0.5f));
+       
+        
+
+    }
+
+    
+    IEnumerator DelayCoroutine(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
         gameObject.SetActive(false);
 
     }
+    IEnumerator ExplosionCoroutine()
+    {
+        var temp = PhotonNetwork.Instantiate(explosion.name, transform.position, Quaternion.identity);
+        if (temp == null)
+        {
+            Debug.Log("생성 안됨");
+            yield break;
+        }
+        else
+        {
+            Debug.Log("생성");
+        }
+            var tempParticle = temp.GetComponent<ParticleSystem>();
+        tempParticle.Play();
+        while (tempParticle.IsAlive())
+        {
+            yield return null;
+        }
+        PhotonNetwork.Destroy(temp);
+        
+    }
+
     [PunRPC]
     public void ShowExplosion()
     {
-        //explosion.gameObject.transform.SetParent(null);
-        explosion.Play();
-        
-
+        selfRenderer.SetActive(false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(ExplosionCoroutine());
+        }
+        else
+        {
+            return;
+        }
+        //gameObject.SetActive(false);
+        //explosion.gameObject.transform.SetParent(null); 
     }
-    //public void UnitMove()
-    //{
-    //
-    //    //Vector3 move = transform.forward; // XZ 방향 이동
-    //    //
-    //    //unitBody.MovePosition(transform.position + move * unitInfo.unitSpeed * Time.deltaTime);
-    //    if (canMove == false)
-    //    {
-    //        return;
-    //    }
-    //    unitBody.velocity = transform.forward * unitInfo.unitSpeed*StaticField.speedModifieValue;
-    //}
-
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    var temp = other.GetComponent<PlayerUnit>();
-    //    if (other.tag == "Player"&&temp.ownPlayerNumber!=ownPlayerNumber)
-    //    {
-    //        gameObject.SetActive(false);
-    //        temp.PlayerGetDemage(unitInfo.unitATK+ unitInfo.unitHP);
-    //        
-    //    }
-    //}
+    
 
 
 }

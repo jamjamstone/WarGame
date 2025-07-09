@@ -71,6 +71,7 @@ public class InGameUIManager : MonoBehaviourPun
         GameManager.Instance.turnManager.OnTurnChanged += SetTurnCount;
         GameManager.Instance.playerManager.OnHostHPChanged += SetHostHp;
         GameManager.Instance.playerManager.OnGuestHPChanged += SetGuestHP;
+        GameManager.Instance.turnManager.OnChangeToBuyPhase += ReadyButtonActivate;
         SetHostHp(StaticField.maxPlayerHp);//¿À·ù
         SetGuestHP(StaticField.maxPlayerHp);
         SetTurnCount(0);
@@ -241,6 +242,7 @@ public class InGameUIManager : MonoBehaviourPun
 
         unitInfoPanel.SetActive(true);
         unitInfoUnitName.text = unit.unitInfo.unitName;
+        unitInfoUnitIcon.texture= unit.unitInfo.unitIcon;
         unitInfoUnitStatus.text = "HP: " + unit.unitInfo.unitHP + "\nATK: " + unit.unitInfo.unitATK + "\nSpeed: " + unit.unitInfo.unitSpeed;
     }
     public void DisableUnitInfo()

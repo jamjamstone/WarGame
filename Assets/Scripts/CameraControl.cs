@@ -11,7 +11,7 @@ public class CameraControl : MonoBehaviourPun
 
     public void SetInitialTransform()
     {
-        Debug.Log("ss");
+        //Debug.Log("ss");
         
             if (PhotonNetwork.IsMasterClient)
             {
