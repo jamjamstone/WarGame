@@ -102,11 +102,12 @@ public class InGameUIManager : MonoBehaviourPun
         }
         if (GameManager.Instance.turnManager.isBuyPhase == true)
         {
-            leftTimeText.text=(StaticField.maximumBuyTime-GameManager.Instance.turnManager.buyPhaseTime).ToString();
+            leftTimeText.text=(StaticField.maximumBuyTime-GameManager.Instance.turnManager.buyPhaseTime).ToString("F2");
+            
         }
         else
         {
-            leftTimeText.text = (StaticField.maximumBattleTime - GameManager.Instance.turnManager.battlePhaseTime).ToString();
+            leftTimeText.text = (StaticField.maximumBattleTime - GameManager.Instance.turnManager.battlePhaseTime).ToString("F2");
         }
     }
     public void SetTurnCount(int turn)
